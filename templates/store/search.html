@@ -10,7 +10,7 @@
                         <h4>Shop</h4>
                         <div class="breadcrumb__links">
                             <a href="./index.html">Home</a>
-                            <span>Shop</span>
+                            <span>search</span>
                         </div>
                     </div>
                 </div>
@@ -23,8 +23,19 @@
     <section class="shop spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
+                {% if products_count == 0 %}
+                <h3 class="text-center"><span class="text-muted text-danger">No products for</span>  {{ request.GET.q }}</h3>
+                {% else %}
+                <h3 class="text-center"><span class="text-muted">search results for</span>  {{ request.GET.q }}</h3>
+                
+                <!-- <div class="col-lg-3">
                     <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+                            <form action="#">
+                                <input type="text" placeholder="Search...">
+                                <button type="submit"><span class="icon_search"></span></button>
+                            </form>
+                        </div>
                         <div class="shop__sidebar__accordion">
                             <div class="accordion" id="accordionExample">
                                 <div class="card">
@@ -142,7 +153,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-lg-9">
                     <div class="shop__product__option">
                         <div class="row">
@@ -164,15 +175,14 @@
                         </div>
                     </div>
 
-
                     <div class="row">
                      {% for product in products %}
 
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="{{ product.get_url }}" class="image">
-                                        <img class="" src="{{ product.image1.url }}" width="200" height="200">
+                                    <a href="{{ product.product.get_url }}" class="image">
+                                        <img class="" src="{{ product.product.image1.url }}" width="200" height="200">
                                         <!-- <img class="{{ product.get_url }}" src="{{ product.images2.url }}" width="200" height="200"> -->
                                     </a>
                                     <ul class="product-links">
@@ -191,7 +201,7 @@
                                         <li class="fas fa-star disable"></li>
                                         <li class="disable">(1 reviews)</li>
                                     </ul>
-                                    <h3 class="title"><a href="{{ product.get_url }}">{{ product.product_name }}</a></h3>
+                                    <h3 class="title"><a href="{{ product.product.get_url }}">{{ product.product.product_name }}</a></h3>
                                     <div class="price">₹ {{ product.price}}</div>
                                 </div>
                             </div>
@@ -210,11 +220,14 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
     </section>
     <!-- Shop Section End -->
+    
 {% endblock %}
 
 

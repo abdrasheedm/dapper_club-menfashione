@@ -35,7 +35,7 @@ class Product(models.Model):
 
 class ProductAttribute(models.Model):
     product                = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image                 = models.ImageField(upload_to='photos/products',null=True)
+    # image                 = models.ImageField(upload_to='photos/products',null=True)
     color                  = models.ForeignKey(Color, on_delete=models.CASCADE)
     size                   = models.ForeignKey(Size, on_delete=models.CASCADE)
     price                  = models.IntegerField()

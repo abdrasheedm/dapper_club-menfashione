@@ -1163,34 +1163,34 @@ ol {
 .shop__sidebar__search form input {
 	width: 100%;
 	font-size: 15px;
-	color: #b7b7b7;
+	color: #4f4f4f;
 	padding-left: 20px;
-	border: 1px solid #e5e5e5;
+	border: 1px solid #4f4f4f;
 	height: 42px;
 }
 
 .shop__sidebar__search form input::-webkit-input-placeholder {
-	color: #b7b7b7;
+	color: #4f4f4f;
 }
 
 .shop__sidebar__search form input::-moz-placeholder {
-	color: #b7b7b7;
+	color: #4f4f4f;
 }
 
 .shop__sidebar__search form input:-ms-input-placeholder {
-	color: #b7b7b7;
+	color: #4f4f4f;
 }
 
 .shop__sidebar__search form input::-ms-input-placeholder {
-	color: #b7b7b7;
+	color: #4f4f4f;
 }
 
 .shop__sidebar__search form input::placeholder {
-	color: #b7b7b7;
+	color: #4f4f4f;
 }
 
 .shop__sidebar__search form button {
-	color: #b7b7b7;
+	color: #4f4f4f;
 	font-size: 15px;
 	border: none;
 	background: transparent;
