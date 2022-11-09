@@ -24,7 +24,7 @@ from .otp_verification import *
 
 def register(request):
 
-    if 'email' in request.session:
+    if 'id' in request.session:
         return redirect('index')
 
     form = RegistrationForm()
@@ -92,8 +92,8 @@ def activate_email(request,uidb64, token):
 
 def signin(request):
 
-    if 'email' in request.session:
-        return redirect('index')
+    if 'id' in request.session:
+        return redirect('id')
 
     form = RegistrationForm()
     if request.method == 'POST':
@@ -103,7 +103,6 @@ def signin(request):
         user = authenticate(request, email=email, password = password )
         if user is not None:
             request.session['id'] = user.pk
-            print(user.pk)
             login(request, user)
             messages.success(request, "Logged in Succesfully")
             return redirect('index')
@@ -117,7 +116,7 @@ def signin(request):
 
 @login_required(login_url='signin')
 def signout(request):
-    if 'email' in request.session:
+    if 'id' in request.session:
         request.session.flush()
     logout(request)
     messages.success(request, "Logged out Succesfully")

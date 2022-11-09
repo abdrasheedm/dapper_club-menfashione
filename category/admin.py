@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category
+from .models import Category, Brand, SubCategory, Size, Color
 
 # Register your models here.
 class CategoryAdmin(admin.ModelAdmin):
@@ -7,3 +7,17 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category_name','slug')
 
 admin.site.register(Category, CategoryAdmin)
+
+class BrandAdmin(admin.ModelAdmin):
+    list_display=('name', 'image_tag')
+admin.site.register(Brand,BrandAdmin)
+
+
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ('sub_category', 'category')
+admin.site.register(SubCategory, SubCategoryAdmin)
+
+class ColorAdmin(admin.ModelAdmin):
+    list_display=('name', 'color_bg')
+admin.site.register(Color, ColorAdmin)
+admin.site.register(Size)

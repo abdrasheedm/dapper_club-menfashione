@@ -6,7 +6,7 @@ from store.models import Product
 
     
 
-class Caart(models.Model):
+class Cart(models.Model):
     user = models.ForeignKey(Account, on_delete = models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_qty = models.IntegerField(null=False, blank=False)

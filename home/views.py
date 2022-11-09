@@ -1,13 +1,18 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from store.models import Product
+from django.shortcuts import get_object_or_404, render
+from store.models import Product, ProductAttribute
+from category.models import Category, Brand
+from .models import Banner
+
 
 # Create your views here.
 def index(request):
-    products = Product.objects.all().filter(is_available=True)
-    price = request.session['total_price']
+    banners = Banner.objects.all().order_by('-id')
+    products = ProductAttribute.objects.filter(product__is_featured=True).order_by('-id')
     context = {
-        'products': products,
-        'price':price,
+        'products':products,
+        'banners':banners,
     }
+    
     return render(request, 'home/index.html', context)
+
+

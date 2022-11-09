@@ -41,7 +41,10 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__categories">
                                                 <ul class="nice-scroll">
-                                                    {% for category in links %}
+                                                    <li><a href="{% url 'store' %}">All Categories</a></li>
+
+                                                    {% for category in cats %}
+                                
                                                     <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
                                                     {% endfor %}
 
@@ -59,10 +62,12 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__brand">
                                                 <ul>
-                                                    <li><a href="#">Louis Vuitton</a></li>
-                                                    <li><a href="#">Chanel</a></li>
-                                                    <li><a href="#">Hermes</a></li>
-                                                    <li><a href="#">Gucci</a></li>
+                                                    <li><a href="{% url 'store' %}">All Brands</a></li>
+
+                                                    {% for brand in brands %}
+                                                    <li><a href="{{ brand.get_url }}">{{ brand.name }}</a></li>
+                                                    {% endfor %}
+    
                                                 </ul>
                                             </div>
                                         </div>
@@ -202,28 +207,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
 
+
+                    <div class="row">
                      {% for product in products %}
 
-                     <div class="col-md-4">
-                        <figure class="card card-product-grid">
-                            <div class="img-wrap text-center"> 
-                                <a href="{{ product.get_url }}"><img src="{{ product.images.url }}" width="200" height="200"></a>
-                                
-                                
-                            </div> <!-- img-wrap.// -->
-                            <figcaption class="info-wrap">
-                                <div class="fix-height">
-                                    <a href="./product-detail.html" class="title">{{ product.product_name }}</a>
-                                    <div class="price-wrap mt-2">
-                                        <span class="price">₹ {{ product.price}}</span>
-                                    </div> <!-- price-wrap.// -->
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product-grid">
+                                <div class="product-image">
+                                    <a href="{{ product.product.get_url }}" class="image">
+                                        <img class="" src="{{ product.product.image1.url }}" width="200" height="200">
+                                        <!-- <img class="{{ product.get_url }}" src="{{ product.images2.url }}" width="200" height="200"> -->
+                                    </a>
+                                    <ul class="product-links">
+                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-random"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                    <a href="#" class="product-view"><i class="fa fa-search"></i></a>
                                 </div>
-                                <a href="#" class="btn btn-block btn-dark ">Add to cart </a>	
-                            </figcaption>
-                        </figure>
-                    </div> <!-- col.// -->
+                                <div class="product-content">
+                                    <ul class="rating">
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star"></li>
+                                        <li class="fas fa-star disable"></li>
+                                        <li class="disable">(1 reviews)</li>
+                                    </ul>
+                                    <h3 class="title"><a href="{{ product.product.get_url }}">{{ product.product.product_name }}</a></h3>
+                                    <div class="price">₹ {{ product.price}}</div>
+                                </div>
+                            </div>
+                        </div>
                         {% endfor %}
 
                     </div>

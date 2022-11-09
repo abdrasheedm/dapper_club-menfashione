@@ -20,56 +20,56 @@
                     <div class="col-lg-3 col-md-3">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="{% static 'img/shop-details/thumb-1.png' %}">
+                                <a class="nav-link active" data-toggle="tab" href=" #tabs-1" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="{{ product.image1.url }}">
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="{% static 'img/shop-details/thumb-2.png' %}">
+                                    <div class="product__thumb__pic set-bg" data-setbg="{{ product.image2.url }}">
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="{% static 'img/shop-details/thumb-3.png' %}">
+                                    <div class="product__thumb__pic set-bg" data-setbg="{{ product.image3.url }}">
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
-                                    <div class="product__thumb__pic set-bg" data-setbg="{% static 'img/shop-details/thumb-4.png' %}">
-                                        <i class="fa fa-play"></i>
+                                    <div class="product__thumb__pic set-bg" data-setbg="{{ product.image4.url }}">
                                     </div>
                                 </a>
                             </li>
+                            
                         </ul>
                     </div>
                     <div class="col-lg-6 col-md-9">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel"> 
                                 <div class="product__details__pic__item">
-                                    <input type="hidden" value="{{ single_product.images.url }}" class="prod_img" >
-                                    <img class="" src ="{{ single_product.images.url }}" alt="">
+                                    <input type="hidden" value="{{ product.image1.url }}" class="prod_img" >
+                                    <img class="" src ="{{ product.image1.url }}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-2" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="{% static 'img/shop-details/product-big-3.png' %}" alt="">
+                                    <img src="{{ product.image2.url }}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big.png" alt="">
+                                    <img src="{{ product.image3.url }}" alt="">
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-4" role="tabpanel">
                                 <div class="product__details__pic__item">
-                                    <img src="img/shop-details/product-big-4.png" alt="">
-                                    <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1" class="video-popup"><i class="fa fa-play"></i></a>
+                                    <img src="{{ product.image4.url }}" alt="">
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="product__details__text">
-                            <h4 class="prod_name">{{ single_product.product_name }}</h4>
+                            <h4 class="prod_name">{{ product.product_name }}</h4>
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -89,48 +89,33 @@
                                 <i class="fa fa-star-o"></i>
                                 <span> - 5 Reviews</span>
                             </div>
-                            <h3 class=""> ₹ <span class="prod_price">{{ single_product.price }}</span> </h3>
-                            <p>{{ single_product.description }}</p>
+                            <h3 class=""> ₹ <span class="prod_price">{{ product.productattribute_price }}</span> </h3>
+                            <p>{{ product.description }}</p>
                             <div class="product__details__option">
                                 <div class="product__details__option__size">
                                     <span>Size:</span>
-                                    <label for="xxl">xxl
-                                        <input type="radio" id="xxl">
+                                    {% for prod in product.productattribute_set.all %}
+
+                                    <label for="">{{ prod.size.size }}
+                                        <input type="radio" id="">
                                     </label>
-                                    <label class="active" for="xl">xl
-                                        <input type="radio" id="xl">
-                                    </label>
-                                    <label for="l">l
-                                        <input type="radio" id="l">
-                                    </label>
-                                    <label for="sm">s
-                                        <input type="radio" id="sm">
-                                    </label>
+                                    {% endfor %}
+
                                 </div>
                                 <div class="product__details__option__color">
                                     <span>Color:</span>
-                                    <label class="c-1" for="sp-1">
-                                        <input type="radio" id="sp-1">
+                                    {% for prod in product.productattribute_set.all %}
+                                    <label class="c-1" style="background:{{ prod.color.color_code}};" for="sp-1">
+                                        <input type="radio" id="sp-1"> 
                                     </label>
-                                    <label class="c-2" for="sp-2">
-                                        <input type="radio" id="sp-2">
-                                    </label>
-                                    <label class="c-3" for="sp-3">
-                                        <input type="radio" id="sp-3">
-                                    </label>
-                                    <label class="c-4" for="sp-4">
-                                        <input type="radio" id="sp-4">
-                                    </label>
-                                    <label class="c-9" for="sp-9">
-                                        <input type="radio" id="sp-9">
-                                    </label>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="product__details__cart__option">
                                 {% if single_product.stock <= 0 %}
                                  <b><h4 class="text-danger">Out of Stock<h4></b>
                                 {% else %}
-                                    <input type="hidden" value="{{ single_product.id }}" class="prod_id" >
+                                    <input type="hidden" value="{{ product.product.id }}" class="prod_id" >
                                 <div class="quantity">
                                     <div class="pro-qty">
                                         <input type="text" id="qty-input" value="1">

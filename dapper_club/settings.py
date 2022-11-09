@@ -68,7 +68,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'category.context_processors.menu_links',
+                # 'category.context_processors.menu_links',
+                # 'category.context_processors.brand_links',
+                'category.context_processors.get_filters',
+
+
             ],
         },
     },
@@ -85,7 +89,7 @@ AUTH_USER_MODEL = 'accounts.Account'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Dapper_club',
+        'NAME': 'dapp306',
         'USER' : 'postgres',
         'PASSWORD' : 'Rashi123',
         'HOST' : 'localhost'

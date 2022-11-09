@@ -276,6 +276,35 @@
     });
     // end of delete item
 
+    // update cart item
+    $(document).on('click',".update-item",function(){
+        var _pId=$(this).attr('data-item');
+        var _pQty=$(".product-qty-"+_pId).val();
+        var _vm=$(this);
+        console.log(_pQty)
+        //Ajax
+        $.ajax({
+            url: '/cart/update-cart',
+            data:{
+                'id':_pId,
+                'qty':_pQty
+            },
+            dataType:'json',
+            beforeSend:function() {
+                _vm.attr('disabled', true);
+            },
+            success:function(res){
+                console.log(res);
+                _vm.attr('disabled', false);           
+            },
+            success:function(res){
+                $("#cartList").html(res.data);
+            }
+
+        });
+        //end ajax
+    });
+
 })(jQuery);
 
 setTimeout(function(){

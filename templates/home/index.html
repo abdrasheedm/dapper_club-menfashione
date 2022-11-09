@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/cards.css'%}" type="text/css">
 </head>
 
 <body>
@@ -128,7 +129,7 @@
                         <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
                         <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
                         <a href="{% url 'cart' %}"><img src="{% static 'img/icon/cart.png' %}" alt=""> <span>0</span></a>
-                        <div class="price">₹ {{price}}</div>
+                        <div class="price">₹</div>
                     </div>
                 </div>
             </div>
@@ -140,7 +141,8 @@
     <!-- Hero Section Begin -->
     <section class="hero">
         <div class="hero__slider owl-carousel">
-            <div class="hero__items set-bg" data-setbg="{% static 'img/hero/hero-1.jpg' %}">
+            {% for banner in banners %}
+            <div class="hero__items set-bg" data-setbg="{{ banner.img.url }}">
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-5 col-lg-7 col-md-8">
@@ -161,27 +163,7 @@
                     </div>
                 </div>
             </div>
-            <div class="hero__items set-bg" data-setbg="{% static 'img/hero/hero-2.jpg' %}">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-7 col-md-8">
-                            <div class="hero__text">
-                                <h6>Summer Collection</h6>
-                                <h2>Fall - Winter Collections 2030</h2>
-                                <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                commitment to exceptional quality.</p>
-                                <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
-                                <div class="hero__social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
     <!-- Hero Section End -->
@@ -234,52 +216,43 @@
             <div class="row">
                 <div class="col-lg-12">
                     <ul class="filter__controls">
-                        <li class="active" data-filter="*">Best Sellers</li>
-                        <li data-filter=".new-arrivals">New Arrivals</li>
-                        <li data-filter=".hot-sales">Hot Sales</li>
+                        <li class="active" >Featured Products</li>
                     </ul>
                 </div>
             </div>
-            <div class="row product__filter">
-            {% for product in products %}
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="{{ product.images.url}}">
-                            <span class="label">New</span>
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
-                                <li><a href="#"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
-                                <!-- <li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li> -->
+            <div class="row">
+                {% for product in products %}
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="product-grid">
+                        <div class="product-image">
+                            <a href="{{ product.product.get_url }}" class="image">
+                                <img class="" src="{{ product.product.image1.url }}" width="200" height="200">
+                                <!-- <img class="{{ product.get_url }}" src="{{ product.images2.url }}" width="200" height="200"> -->
+                            </a>
+                            <ul class="product-links">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="#"><i class="fa fa-random"></i></a></li>
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
+                            <a href="#" class="product-view"><i class="fa fa-search"></i></a>
                         </div>
-                        <div class="product__item__text">
-                            <h6>{{product.product_name}}</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            <div class="rating">
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <h5>{{product.price}}</h5>
-                            <div class="product__color__select">
-                                <label for="pc-1">
-                                    <input type="radio" id="pc-1">
-                                </label>
-                                <label class="active black" for="pc-2">
-                                    <input type="radio" id="pc-2">
-                                </label>
-                                <label class="grey" for="pc-3">
-                                    <input type="radio" id="pc-3">
-                                </label>
-                            </div>
+                        <div class="product-content">
+                            <ul class="rating">
+                                <li class="fas fa-star"></li>
+                                <li class="fas fa-star"></li>
+                                <li class="fas fa-star"></li>
+                                <li class="fas fa-star"></li>
+                                <li class="fas fa-star disable"></li>
+                                <li class="disable">(1 reviews)</li>
+                            </ul>
+                            <h3 class="title"><a href="{{ product.product.get_url }}">{{ product.product.product_name }}</a></h3>
+                            <div class="price">₹ {{ product.price}}</div>
                         </div>
                     </div>
-                    
-
                 </div>
-            {% endfor %}
+                {% endfor %}
+
 
                 
             </div>

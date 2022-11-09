@@ -52,12 +52,14 @@
                                 <td class="quantity__item">
                                     <div class="quantity">
                                         <div class="pro-qty-2">
-                                            <input type="text" value="{{item.qty}}">
+                                            <input class="product-qty-{{ product_id }}" type="text" value="{{item.qty}}">
                                         </div>
                                     </div>
                                 </td>
+                                
                                 <td class="cart__price">{% widthratio item.price 1 item.qty %}</td>
-                                <td class="cart__close "><button class="delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></button></td>
+                                <td class="cart__close update-item" data-item="{{ product_id }}"><i class="fa fa-sync"></i></td>
+                                <td class="cart__close delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></td>
                             </tr>
                             {% endfor %}
                             {% else %}
@@ -77,12 +79,12 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            <button class="update-item" data-item="10"><i class="fa fa-spinner"></i> Update cart</button>
                         </div>
                     </div>
                 </div>
             </div>
-            {% if single_product.items  %}
+            {% if single_product.items %}
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>
