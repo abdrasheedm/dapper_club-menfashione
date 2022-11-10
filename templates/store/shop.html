@@ -9,7 +9,7 @@
                     <div class="breadcrumb__text">
                         <h4>Shop</h4>
                         <div class="breadcrumb__links">
-                            <a href="./index.html">Home</a>
+                            <a href="{% url 'index' %}">Home</a>
                             <span>Shop</span>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                                     <ul class="product-links">
                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                         <li><a href="#"><i class="fa fa-random"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                        <!-- <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li> -->
                                     </ul>
                                     <a href="#" class="product-view"><i class="fa fa-search"></i></a>
                                 </div>
@@ -211,8 +211,8 @@
                                 {% endif %}
                                 {% endfor %}
 
-                                <span>...</span>
-                                <a href="#">21</a>
+                                <!-- <span>...</span>
+                                <a href="#">21</a> -->
                             </div>
                             {% endif %}
                         </div>

@@ -91,22 +91,23 @@
                             </div>
                             <h3 class=""> ₹ <span class="prod_price">{{ product.price }}</span> </h3>
                             <p>{{ product.description }}</p>
-                            <div class="product__details__option">
-                                <div class="product__details__option__size">
+                            <div class="product__details__option row">
+                                <div class="product__details__option__size col-md-5">
                                     <span>Size:</span>
                                     {% for size in sizes %}
-                                    <label for="">{{ size.size__size }}
+                                    <label class="choose-size color{{size.color__id}}" for="">{{ size.size__size }}
                                         <input type="radio" id="">
                                     </label>
                                     {% endfor %}
 
                                 </div>
-                                <div class="product__details__option__color">
-                                    <span>Color:</span>
+                                <div class="product__details__option__color col-md-5">
+                                    <span class="">Color:</span>
                                     {% for color in colors %}
-                                    <label class="c-1" style="background:{{ color.color__color_code }};" for="sp-1">
+                                    <button class="btn btn-lg btn-outline-secondary rounded choose-color" data-color="{{color.color__id}}" style="background-color: {{color.color__color_code}}"></button>
+                                    <!-- <label class="c-1 choose-color" data-color="{{color.color__id}}" style="background:{{ color.color__color_code }};" for="sp-1">
                                         <input type="radio" id="sp-1"> 
-                                    </label>
+                                    </label> -->
                                     {% endfor %}
                                 </div>
                             </div>
@@ -114,7 +115,7 @@
                                 {% if .stock <= 0 %}
                                  <b><h4 class="text-danger">Out of Stock<h4></b>
                                 {% else %}
-                                    <input type="hidden" value="{{ product.product.id }}" class="prod_id" >
+                                    <input type="hidden" value="{{ product.id }}" class="prod_id" >
                                 <div class="quantity">
                                     <div class="pro-qty">
                                         <input type="text" id="qty-input" value="1">

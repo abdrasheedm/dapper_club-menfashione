@@ -22,12 +22,8 @@ def add_to_cart(request):
         'price':request.GET['price'],
     }
 
-    product = ProductAttribute.objects.get(product__id__exact=request.GET['id'])
-    if int(request.GET['qty']) > product.stock : 
-        return JsonResponse({'message' : 'only '+ str(product.stock) + ' available'})
-
-    else:
-        if 'cartdata' in request.session:
+    product = Product.objects.get(id__exact=request.GET['id'])
+    if 'cartdata' in request.session:
             if str(request.GET['id']) in request.session['cartdata']:
                 cart_data=request.session['cartdata']
                 cart_data[str(request.GET['id'])]['qty']=int(cart_prod[str(request.GET['id'])]['qty'])
@@ -38,8 +34,8 @@ def add_to_cart(request):
                 print(cart_data)
                 cart_data.update(cart_prod)
                 request.session['cartdata']=cart_data
-        else:
-            request.session['cartdata']=cart_prod
+    else:
+        request.session['cartdata']=cart_prod
     return JsonResponse({'single_product':request.session['cartdata']})
 
 

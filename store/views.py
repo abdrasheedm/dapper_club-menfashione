@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from store.models import Product, ProductAttribute
 from category.models import Category, Brand
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def store(request, category_slug=None) :
@@ -59,7 +60,7 @@ def product_detail(request, sub_category_slug, product_slug):
         product = Product.objects.get(slug=product_slug)
         related_products = Product.objects.filter(sub_category__category=product.sub_category.category).exclude(slug=product_slug)[:4]
         colors=ProductAttribute.objects.filter(product=product).values('color__id','color__name','color__color_code').distinct()
-        sizes=ProductAttribute.objects.filter(product=product).values('size__id','size__size').distinct()
+        sizes=ProductAttribute.objects.filter(product=product).values('size__id','size__size','color__id').distinct()
         price = ProductAttribute.objects.filter(product=product).first()
         print(sizes.count())
         print(product.price)
@@ -124,6 +125,26 @@ def search(request):
     }
     return render(request, 'store/search.html', context)
 
+
+@login_required(login_url='signin')
+def checkout(request):
+    context = {}
+    if 'cartdata' in request.session:
+        total_amount = 0
+        for p_id,item in request.session['cartdata'].items():
+
+            total_amount += int(item['qty'])*float(item['price'])
+
+        tax = round((18 * float(total_amount))/100)
+        sub_total = total_amount - tax
+        context = {
+            'total_amount':total_amount,
+            'tax':tax,
+            'sub_total':sub_total,
+            'single_product':request.session['cartdata']
+        }
+        # request.session['total_price'] = total_amount
+    return render(request, 'store/checkout.html', context)
 
 
 

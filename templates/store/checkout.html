@@ -51,15 +51,16 @@
                                 </td>
                                 <td class="quantity__item">
                                     <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input class="product-qty-{{ product_id }}" type="text" value="{{item.qty}}">
+                                        <div class="mx-5">
+                                            <h6>{{item.qty}}</h6>
+                                            <!-- <input class="product-qty-{{ product_id }}" type="text" value=""> -->
                                         </div>
                                     </div>
                                 </td>
                                 
                                 <td class="cart__price">{% widthratio item.price 1 item.qty %}</td>
-                                <td class="cart__close update-item" data-item="{{ product_id }}"><i class="fa fa-sync"></i></td>
-                                <td class="cart__close delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></td>
+                                <!-- <td class="cart__close update-item" data-item="{{ product_id }}"><i class="fa fa-sync"></i></td>
+                                <td class="cart__close delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></td> -->
                             </tr>
                             {% endfor %}
                             {% else %}
@@ -73,9 +74,9 @@
                 </div> 
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn">
+                        <!-- <div class="continue__btn">
                             <a href="{% url 'store' %}">Continue Shopping</a>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
@@ -84,7 +85,6 @@
                     </div> -->
                 </div>
             </div>
-            {% if single_product.items %}
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>
@@ -93,6 +93,8 @@
                         <button type="submit">Apply</button>
                     </form>
                 </div>
+            {% if single_product.items %}
+
                 <div class="cart__total">
                     <h6>Cart total</h6>
                     <ul>
@@ -100,7 +102,7 @@
                         <li>Tax <span>₹ {{ tax }}</span></li>
                         <li>Total <span>₹ {{ total_amount }}</span></li>
                     </ul>
-                    <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a>
+                    <a href="#" class="primary-btn">Proceed to checkout</a>
                 </div>
             </div>
             {% endif %}
