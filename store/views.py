@@ -2,24 +2,24 @@
 from django.shortcuts import get_object_or_404, render
 from store.models import Product, ProductAttribute
 from category.models import Category, Brand
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # Create your views here.
-def store(request, category_slug=None) : 
-    
-    print("looooi")
+def store(request, category_slug=None) :
 
     categories = None
     products = None
-    brands = None
     print(category_slug)
 
     # brands = Brand.objects.all()
 
     if category_slug != None:
-        print("cat")    
 
         categories = get_object_or_404(Category, slug=category_slug)
-        products = ProductAttribute.objects.filter(product__sub_category__category=categories)
+        products = Product.objects.filter(sub_category__category=categories)
+        paginator = Paginator(products, 4)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
         products_count = products.count()
 
     # elif brand_slug != None:
@@ -37,11 +37,14 @@ def store(request, category_slug=None) :
 
         # products = ProductAttribute.objects.distinct().values('product__product_name', 'price', 'product__image1')
         products = Product.objects.all().order_by('-id')
+        paginator = Paginator(products, 4)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
         products_count = products.count()
 
 
     context = {
-        'products': products,
+        'products': paged_products,
         'products_count':products_count,
         # 'brands':brands,
 
@@ -56,8 +59,10 @@ def product_detail(request, sub_category_slug, product_slug):
         product = Product.objects.get(slug=product_slug)
         related_products = Product.objects.filter(sub_category__category=product.sub_category.category).exclude(slug=product_slug)[:4]
         colors=ProductAttribute.objects.filter(product=product).values('color__id','color__name','color__color_code').distinct()
-        sizes=ProductAttribute.objects.filter(product=product).values('size__id','size__size','price','color__id').distinct()
+        sizes=ProductAttribute.objects.filter(product=product).values('size__id','size__size').distinct()
+        price = ProductAttribute.objects.filter(product=product).first()
         print(sizes.count())
+        print(product.price)
         
 
     except Exception as e:
@@ -70,6 +75,7 @@ def product_detail(request, sub_category_slug, product_slug):
         'product':product,
         'sizes':sizes,
         'colors':colors,
+        'price':price,
 
     }
     return render(request, 'store/product_detail.html', context)
@@ -86,7 +92,7 @@ def store_by_brand(request, brand_slug=None):
         brands = get_object_or_404(Brand, slug=brand_slug)
         print("helllo")
 
-        products = ProductAttribute.objects.filter(product__brand = brands)
+        products = Product.objects.filter(brand = brands).order_by('-id')
         print("pooi")
         products_count = products.count()
 
@@ -94,7 +100,7 @@ def store_by_brand(request, brand_slug=None):
     else:
         print("else")
 
-        products = ProductAttribute.objects.all()
+        products = Product.objects.all()
         products_count = products.count()
 
 
@@ -108,7 +114,7 @@ def store_by_brand(request, brand_slug=None):
 
 def search(request):
     q = request.GET['q']
-    products = ProductAttribute.objects.filter(product__product_name__icontains=q).order_by('-id')
+    products = Product.objects.filter(product_name__icontains=q).order_by('-id')
     products_count = products.count()
     context = {
         'products': products,

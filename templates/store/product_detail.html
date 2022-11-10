@@ -89,7 +89,7 @@
                                 <i class="fa fa-star-o"></i>
                                 <span> - 5 Reviews</span>
                             </div>
-                            <h3 class=""> ₹ <span class="prod_price">{{ product.productattribute__price }}</span> </h3>
+                            <h3 class=""> ₹ <span class="prod_price">{{ product.price }}</span> </h3>
                             <p>{{ product.description }}</p>
                             <div class="product__details__option">
                                 <div class="product__details__option__size">
@@ -111,7 +111,7 @@
                                 </div>
                             </div>
                             <div class="product__details__cart__option">
-                                {% if single_product.stock <= 0 %}
+                                {% if .stock <= 0 %}
                                  <b><h4 class="text-danger">Out of Stock<h4></b>
                                 {% else %}
                                     <input type="hidden" value="{{ product.product.id }}" class="prod_id" >
@@ -300,7 +300,7 @@
                                         <li class="disable">(1 reviews)</li>
                                     </ul>
                                     <h3 class="title"><a href="{{ product.get_url }}">{{ product.product_name }}</a></h3>
-                                    <div class="price">₹ {{ product.price}}</div>
+                                    <div class="price">₹ {{ product.price }}</div>
                                 </div>
                             </div>
                         </div>

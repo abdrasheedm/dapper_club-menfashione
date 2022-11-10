@@ -4,7 +4,7 @@ from .models import Product, ProductAttribute
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product_name','image_tag','sub_category', 'modified_date','is_available', 'is_featured',)
+    list_display = ('id','product_name','image_tag','sub_category', 'modified_date','is_available', 'is_featured',)
     list_editable = ('is_available', 'is_featured',)
 
 admin.site.register(Product, ProductAdmin)

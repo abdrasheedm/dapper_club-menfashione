@@ -7,7 +7,8 @@ from .models import Banner
 # Create your views here.
 def index(request):
     banners = Banner.objects.all().order_by('-id')
-    products = ProductAttribute.objects.filter(product__is_featured=True).order_by('-id')
+    # products = ProductAttribute.objects.filter(product__is_featured=True).values('product__product_name','price','product__image1').distinct().order_by('-id')
+    products = Product.objects.filter(is_featured=True)
     context = {
         'products':products,
         'banners':banners,
