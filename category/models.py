@@ -70,6 +70,9 @@ class Color(models.Model):
     slug            =   AutoSlugField(populate_from='name',unique_with=('color_code'),max_length=255,unique=True,null=True)
 
 
+    def get_url(self):
+        return reverse('product_by_color', args=[self.slug]) 
+
     def color_bg(self):
         return mark_safe('<div style="width:30px; height:30px; background-color:%s" ></div>' % (self.color_code))
 
@@ -86,6 +89,9 @@ class Size(models.Model):
     slug            = AutoSlugField(populate_from='size',max_length=255,unique=True,null=True)
 
 
+    def get_url(self):
+        return reverse('product_by_size', args=[self.slug])
 
+        
     def __str__(self):
         return self.size

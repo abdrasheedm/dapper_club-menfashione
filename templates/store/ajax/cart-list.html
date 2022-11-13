@@ -1,4 +1,4 @@
-<div class="row" id="cartList">
+<div class="row">
     <div class="col-lg-8">
         <div class="shopping__cart__table">
             {% if single_product.items %}
@@ -7,6 +7,8 @@
                     <tr>
                         <th>Product</th>
                         <th>Quantity</th>
+                        <th>color</th>
+                        <th>size</th>
                         <th>Total</th>
                         <th></th>
                     </tr>
@@ -32,13 +34,15 @@
                             </div>
                         </td>
                         
+                        <td class="cart__price">{{ item.color}}</td>
+                        <td class="cart__price">{{ item.size}}</td>
                         <td class="cart__price">{% widthratio item.price 1 item.qty %}</td>
                         <td class="cart__close update-item" data-item="{{ product_id }}"><i class="fa fa-sync"></i></td>
                         <td class="cart__close delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></td>
                     </tr>
                     {% endfor %}
                     {% else %}
-            <h2 class="text-center text-danger m-5 p-5">No products in the Cart</h2>
+            <h1 class="text-center text-danger m-5 p-5 ">Your Cart is empty</h1>
             {% endif %}
                     
                 </tbody>
@@ -49,14 +53,14 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="continue__btn">
-                    <a href="#">Continue Shopping</a>
+                    <a href="{% url 'store' %}">Continue Shopping</a>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="continue__btn update__btn">
-                    <button><i class="fa fa-spinner"></i> Update cart</button>
+                    <button class="update-item" data-item="10"><i class="fa fa-spinner"></i> Update cart</button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     {% if single_product.items %}
@@ -75,7 +79,7 @@
                 <li>Tax <span>₹ {{ tax }}</span></li>
                 <li>Total <span>₹ {{ total_amount }}</span></li>
             </ul>
-            <a href="#" class="primary-btn">Proceed to checkout</a>
+            <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a>
         </div>
     </div>
     {% endif %}

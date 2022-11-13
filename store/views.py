@@ -1,7 +1,7 @@
 
 from django.shortcuts import get_object_or_404, render
 from store.models import Product, ProductAttribute
-from category.models import Category, Brand
+from category.models import Category, Brand, Color, Size
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
 
@@ -60,7 +60,7 @@ def product_detail(request, sub_category_slug, product_slug):
         product = Product.objects.get(slug=product_slug)
         related_products = Product.objects.filter(sub_category__category=product.sub_category.category).exclude(slug=product_slug)[:4]
         colors=ProductAttribute.objects.filter(product=product).values('color__id','color__name','color__color_code').distinct()
-        sizes=ProductAttribute.objects.filter(product=product).values('size__id','size__size','color__id').distinct()
+        sizes=ProductAttribute.objects.filter(product=product).values('id','size__id','size__size','color__id').distinct()
         price = ProductAttribute.objects.filter(product=product).first()
         print(sizes.count())
         print(product.price)
@@ -124,6 +124,35 @@ def search(request):
 
     }
     return render(request, 'store/search.html', context)
+
+
+def product_by_color(request, color_slug):
+    colors = get_object_or_404(Color, slug=color_slug)
+    print("color")
+
+    products = ProductAttribute.objects.filter(color = colors).order_by('-id')
+    print("pooi")
+    products_count = products.count()
+    context = {
+        'products':products,
+        'products_count':products_count,
+    }
+    return render(request, 'store/product_by_color.html', context)
+
+
+def product_by_size(request, size_slug):
+    sizes = get_object_or_404(Size, slug=size_slug)
+    print("color")
+
+    products = ProductAttribute.objects.filter(size = sizes).order_by('-id')
+    print("pooi")
+    products_count = products.count()
+    context = {
+        'products':products,
+        'products_count':products_count,
+    }
+    return render(request, 'store/product_by_size.html', context)
+
 
 
 @login_required(login_url='signin')

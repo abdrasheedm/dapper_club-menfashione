@@ -211,13 +211,20 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
+                            {% if products.has_other_pages %}
                             <div class="product__pagination">
-                                <a class="active" href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <span>...</span>
-                                <a href="#">21</a>
+                                {% for i in products.paginator.page_range %}
+                                {% if products.number == i %}
+                                <a class="active" href="#"> {{i}} </a>
+                                {% else %}
+                                <a class="" href="?page={{i}}"> {{i}} </a>
+                                {% endif %}
+                                {% endfor %}
+
+                                <!-- <span>...</span>
+                                <a href="#">21</a> -->
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% endif %}

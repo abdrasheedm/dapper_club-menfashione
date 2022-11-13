@@ -13,7 +13,7 @@ admin.site.register(Product, ProductAdmin)
 
 
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product','image_tag', 'color_bg', 'size', 'is_available')
+    list_display = ('id', 'product','image_tag', 'color_bg', 'size','stock', 'is_available')
     list_editable = ('is_available',)
 
 

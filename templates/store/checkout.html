@@ -23,88 +23,126 @@
 <!-- Shopping Cart Section Begin -->
 <section class="shopping-cart spad">
     <div class="container " >
-        <div class="row" id="cartList">
-            <div class="col-lg-8">
-                <div class="shopping__cart__table">
-                    {% if single_product.items %}
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            {% for product_id,item in single_product.items %}
-                            <tr>
-                                <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img src="{{ item.image }}" width="100" height="130" alt="">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>{{item.name}}</h6>
-                                        <h5>{{item.price}}</h5>
-                                    </div>
-                                </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="mx-5">
-                                            <h6>{{item.qty}}</h6>
-                                            <!-- <input class="product-qty-{{ product_id }}" type="text" value=""> -->
-                                        </div>
-                                    </div>
-                                </td>
-                                
-                                <td class="cart__price">{% widthratio item.price 1 item.qty %}</td>
-                                <!-- <td class="cart__close update-item" data-item="{{ product_id }}"><i class="fa fa-sync"></i></td>
-                                <td class="cart__close delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></td> -->
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                    <h2 class="text-center text-danger m-5 p-5">No products in the Cart</h2>
-                    {% endif %}
-                            
-                        </tbody>
-                    </table>
-                    
-
-                </div> 
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <!-- <div class="continue__btn">
-                            <a href="{% url 'store' %}">Continue Shopping</a>
-                        </div> -->
+        <div class="row d-flex justify-content-between">
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title mb-4">Billing Address</h4>
+                  <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                      <div class="col form-group">
+                        <label for="">First Name</label>
+                        <input type="text" name="first_name" class="form-control" required>
+                      </div>
+                      <div class="col form-group">
+                        <label for="">Last Name</label>
+                        <input type="text" name="last_name" class="form-control" required>
+                      </div>
                     </div>
-                    <!-- <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn update__btn">
-                            <button class="update-item" data-item="10"><i class="fa fa-spinner"></i> Update cart</button>
-                        </div>
-                    </div> -->
+                    <div class="form-row">
+                      <div class="col form-group">
+                        <label for="">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                      </div>
+                      <div class="col form-group">
+                        <label for="">Phone Number</label>
+                        <input type="text" name="phone" class="form-control" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col form-group">
+                        <label for="">Address Line 1</label>
+                        <input type="text" name="address_line_1" class="form-control" required>
+                      </div>
+                      <div class="col form-group">
+                        <label for="">Address Line 2</label>
+                        <input type="text" name="address_line_2" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col form-group">
+                        <label for="">City</label>
+                        <input type="text" name="city" class="form-control" required>
+                      </div>
+                      <div class="col form-group">
+                        <label for="">State</label>
+                        <input type="text" name="state" class="form-control" required>
+                      </div>
+                      <div class="col form-group">
+                        <label for="">Country</label>
+                        <input type="text" name="country" class="form-control" required>
+                      </div>
+                      </div>
+                      <div class="form-row">
+                        <label for="">Order Note</label>
+                        <textarea name="order_note" rows="2" class="form-control"></textarea>
+                      </div>
+              
+              
                 </div>
+              </div> 
+               
             </div>
-            <div class="col-lg-4">
-                <div class="cart__discount">
-                    <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
-                    </form>
-                </div>
             {% if single_product.items %}
+            <div class="col-lg-5 card">
+              <div class="shopping__cart__table">
+                {% if single_product.items %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for product_id,item in single_product.items %}
+                        <tr>
+                            <td class="product__cart__item">
+                                <div class="product__cart__item__pic">
+                                    <img src="{{ item.image }}" width="100" height="130" alt="">
+                                </div>
+                                <div class="product__cart__item__text">
+                                    <h6>{{item.name}}</h6>
+                                    <h5>₹ {{item.price}}</h5>
+                                </div>
+                            </td>
+                            <td class="quantity__item">
+                                <div class="quantity">
+                                    <div class="mx-5">
+                                        {{item.qty}}
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            <td class="cart__price">{% widthratio item.price 1 item.qty %}</td>
+                            
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                <h2 class="text-center text-danger m-5 p-5">No products in the Cart</h2>
+                {% endif %}
+                        
+                    </tbody>
+                </table>
+                
 
-                <div class="cart__total">
+            </div>   
+                <div class="cart__total mb-3">
                     <h6>Cart total</h6>
                     <ul>
                         <li>Subtotal <span>₹ {{ sub_total }}</span></li>
                         <li>Tax <span>₹ {{ tax }}</span></li>
                         <li>Total <span>₹ {{ total_amount }}</span></li>
                     </ul>
-                    <a href="#" class="primary-btn">Proceed to checkout</a>
+                    <button class="primary-btn btn-lg btn-block" type="submit" name="submit">Place Order</button>
+                    <!-- <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a> -->
                 </div>
             </div>
+          </form>
             {% endif %}
 
         </div>

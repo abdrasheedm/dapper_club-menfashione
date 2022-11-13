@@ -215,13 +215,22 @@
     //Add to Cart using ajax
     $(document).on('click',"#addToCartBtn",function() {
         var _vm = $(this);
-        var product_id = $(".prod_id").val();
+        // var product_id = $(".prod_id").val();
+        var product_id = $(".prod-id").attr('prod-id');
         var product_qty = $("#qty-input").val();
         var product_prc = $(".prod_price").text();
         var product_name = $(".prod_name").text();
+        var product_clr = $(".color-title").attr('color');
+        var product_size = $(".prod-id").text();
         var product_image = $(".prod_img").val();
 
-        console.log(product_id, product_qty, product_prc, product_name)    
+
+        console.log(product_id+'prod id')
+        console.log(product_clr+' clr')
+        console.log(product_size+' sz')
+
+
+        console.log(product_qty, product_prc, product_name)    
 
         //Ajax
         $.ajax({
@@ -231,6 +240,8 @@
                 'name':product_name,
                 'image':product_image,
                 'qty' :product_qty,
+                'color' :product_clr,
+                'size' :product_size,
                 'price':product_prc,
             },
             dataType:'json',

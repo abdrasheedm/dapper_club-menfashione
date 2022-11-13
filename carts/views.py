@@ -19,10 +19,12 @@ def add_to_cart(request):
         'name':request.GET['name'],
         'image':request.GET['image'],
         'qty':request.GET['qty'],
+        'color':request.GET['color'],
+        'size':request.GET['size'],
         'price':request.GET['price'],
     }
 
-    product = Product.objects.get(id__exact=request.GET['id'])
+    product = ProductAttribute.objects.get(id__exact=request.GET['id'])
     if 'cartdata' in request.session:
             if str(request.GET['id']) in request.session['cartdata']:
                 cart_data=request.session['cartdata']

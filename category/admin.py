@@ -18,6 +18,9 @@ class SubCategoryAdmin(admin.ModelAdmin):
 admin.site.register(SubCategory, SubCategoryAdmin)
 
 class ColorAdmin(admin.ModelAdmin):
-    list_display=('name', 'color_bg')
+    list_display=('id','name', 'color_bg')
 admin.site.register(Color, ColorAdmin)
+
+class SizeAdmin(admin.ModelAdmin):
+    list_display=('id', 'size')
 admin.site.register(Size)

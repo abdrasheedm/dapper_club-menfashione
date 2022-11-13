@@ -13,14 +13,16 @@ def get_filters(request):
     # cats = Product.objects.distinct().values('sub_category__category__category_name', 'sub_category__category__id')
     cats = Category.objects.all()
     brands = Brand.objects.all()
-    colors = ProductAttribute.objects.distinct().values('color__name', 'color__id', 'color__color_code')
+    colors = Color.objects.all()
+    sizes = Size.objects.all()
+    # colors = ProductAttribute.objects.distinct().values('color__name', 'color__id', 'color__color_code')
     # sizes = ProductAttribute.objects.distinct().values('size__size', 'size__id')
     prods = Product.objects.all()
     data = {
         'cats':cats,
         'brands':brands,
         'colors':colors,
-        # 'sizes':sizes,
+        'sizes':sizes,
         'prods':prods,
     }
     return data

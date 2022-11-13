@@ -93,21 +93,42 @@
                             <p>{{ product.description }}</p>
                             <div class="product__details__option row">
                                 <div class="product__details__option__size col-md-5">
+                                    <!-- <h6>Choose size</h6>
+                                        <select name="color" class="form-control" required>
+                                            <option value="" disabled selected>Select</option>
+                                            {% for size in sizes %}
+                                            <option class="choose-size color{{size.color__id}}" value="">{{ size.size__size | capfirst }}</option>
+                                            {% endfor %}
+                                        </select> -->
                                     <span>Size:</span>
                                     {% for size in sizes %}
-                                    <label class="choose-size color{{size.color__id}}" for="">{{ size.size__size }}
+
+                                    <button class="btn btn-sm btn-outline-secondary choose-size size{{ size.id }} color{{size.color__id}}" prod-id="{{ size.id }}" >{{ size.size__size }}</button>
+
+                                    
+                                    <!-- <label class="choose-size color{{size.color__id}}" data-size="{{ size.id }}" for="">{{ size.size__size }}
                                         <input type="radio" id="">
-                                    </label>
+                                    </label> -->
+                                    <!-- {{size.id}} -->
                                     {% endfor %}
 
                                 </div>
                                 <div class="product__details__option__color col-md-5">
+
+                                    <!-- <div class="item-option-select">
+                                        <h6>Choose Color</h6>
+                                        <select name="color" class="form-control" required>
+                                            <option value="" disabled selected>Select</option>
+                                            {% for color in colors %}
+                                            <option class="choose-color" data-color="{{color.color__id}}" value="{{ color.color__name | lower }}">{{ color.color__name | capfirst }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div> -->
+                                    
                                     <span class="">Color:</span>
                                     {% for color in colors %}
-                                    <button class="btn btn-lg btn-outline-secondary rounded choose-color" data-color="{{color.color__id}}" style="background-color: {{color.color__color_code}}"></button>
-                                    <!-- <label class="c-1 choose-color" data-color="{{color.color__id}}" style="background:{{ color.color__color_code }};" for="sp-1">
-                                        <input type="radio" id="sp-1"> 
-                                    </label> -->
+                                    {{color.color__name}}
+                                    <button class="btn btn-lg btn-outline-secondary rounded choose-color color-{{color.color__id}}" data-color="{{color.color__id}}" color="{{color.color__name}}" style="background-color: {{color.color__color_code}}"></button>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -157,7 +178,7 @@
                                     <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
                                     information</a>
                                 </li>
-                            </ul>
+                            </ul>z
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabs-5" role="tabpanel">
                                     <div class="product__details__tab__content">

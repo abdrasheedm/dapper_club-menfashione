@@ -94,11 +94,9 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__size">
                                                 {% for size in sizes %}
-                                                <a href="{{ size.get_url }}">
-                                                <label for="{{ size.size__size}}">{{ size.size}}
+                                                <label for="{{ size.size__size}}">{{ size.size__size}}
                                                     <input type="radio" id="{{ size.size__size}}">
                                                 </label>
-                                            </a>
                                                 {% endfor %}
                                             </div>
                                         </div>
@@ -112,8 +110,8 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__color">
                                                 {% for color in colors %}
-                                                <a href="{{ color.get_url }}">
-                                                <label style="background:{{color.color_code}} ;" for="sp-1">
+                                                <a class="" href="{{ color.get_url }}">
+                                                <label class="" style="background:{{color.color_code}} ;" for="sp-1">
                                                     <input type="radio" id="sp-1">
                                                 </label>
                                             </a>
@@ -174,8 +172,8 @@
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="{{ product.get_url }}" class="image">
-                                        <img class="" src="{{ product.image1.url }}" width="200" height="200">
+                                    <a href="{{ product.product.get_url }}" class="image">
+                                        <img class="" src="{{ product.product.image1.url }}" width="200" height="200">
                                         <!-- <img class="{{ product.get_url }}" src="{{ product.images2.url }}" width="200" height="200"> -->
                                     </a>
                                     <ul class="product-links">
@@ -194,8 +192,8 @@
                                         <li class="fas fa-star disable"></li>
                                         <li class="disable">(1 reviews)</li>
                                     </ul>
-                                    <h3 class="title"><a href="{{ product.get_url }}">{{ product.product_name }}</a></h3>
-                                    <div class="price">₹ {{ product.price}}</div>
+                                    <h3 class="title"><a href="{{ product.product.get_url }}">{{ product.product.product_name }}</a></h3>
+                                    <div class="price">₹ {{ product.product.price}}</div>
                                 </div>
                             </div>
                         </div>
