@@ -1,7 +1,7 @@
 
 from django.shortcuts import get_object_or_404, render
 from store.models import Product, ProductAttribute
-from category.models import Category, Brand, Color, Size
+from category.models import Category, Brand, Color, Size, PriceFilter
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
 
@@ -18,7 +18,7 @@ def store(request, category_slug=None) :
 
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(sub_category__category=categories)
-        paginator = Paginator(products, 4)
+        paginator = Paginator(products, 12)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         products_count = products.count()
@@ -38,7 +38,7 @@ def store(request, category_slug=None) :
 
         # products = ProductAttribute.objects.distinct().values('product__product_name', 'price', 'product__image1')
         products = Product.objects.all().order_by('-id')
-        paginator = Paginator(products, 4)
+        paginator = Paginator(products, 12)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         products_count = products.count()
@@ -152,6 +152,18 @@ def product_by_size(request, size_slug):
         'products_count':products_count,
     }
     return render(request, 'store/product_by_size.html', context)
+
+
+def products_by_price(request, price_id):
+    price_filter = get_object_or_404(PriceFilter, id=price_id)
+    products = Product.objects.filter(price_filter=price_filter).order_by('-id')
+
+    products_count = products.count()
+    context = {
+        'products':products,
+        'products_count':products_count,
+    }
+    return render(request, 'store/product_by_price.html', context)
 
 
 

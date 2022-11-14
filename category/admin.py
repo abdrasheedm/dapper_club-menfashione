@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Brand, SubCategory, Size, Color
+from .models import Category, Brand, SubCategory, Size, Color, PriceFilter
 
 # Register your models here.
 class CategoryAdmin(admin.ModelAdmin):
@@ -24,3 +24,8 @@ admin.site.register(Color, ColorAdmin)
 class SizeAdmin(admin.ModelAdmin):
     list_display=('id', 'size')
 admin.site.register(Size)
+
+
+class PriceFilterAdmin(admin.ModelAdmin):
+    list_display = ('id', 'price')
+admin.site.register(PriceFilter, PriceFilterAdmin)

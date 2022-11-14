@@ -16,6 +16,7 @@ class Product(models.Model):
     sub_category           = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     brand                  = models.ForeignKey(Brand, on_delete=models.CASCADE)
     price                  = models.IntegerField(default=None, null=True)
+    price_filter           = models.ForeignKey(PriceFilter, on_delete=models.CASCADE, null=True, blank=True)
     is_available           = models.BooleanField(default=True)
     is_featured            = models.BooleanField(default=False)
     created_date           = models.DateTimeField(auto_now_add=True)

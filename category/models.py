@@ -95,3 +95,20 @@ class Size(models.Model):
         
     def __str__(self):
         return self.size
+
+
+class PriceFilter(models.Model):
+    FILTER_PRICE = (
+        ('500 TO 1000', '500 TO 1000'),
+        ('1000 TO 2000', '1000 TO 2000'),
+        ('2000 TO 5000', '2000 TO 5000'),
+        ('5000 TO 10000', '5000 TO 10000'),
+
+    )
+    price = models.CharField(choices=FILTER_PRICE, max_length=60)
+
+    def __str__(self):
+        return self.price
+
+    def get_url(self):
+        return reverse('products_by_price', args=[self.pk])

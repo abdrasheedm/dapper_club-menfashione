@@ -75,7 +75,7 @@
                                         <div class="card-body">
                                             <div class="shop__sidebar__price">
                                                 <ul>
-                                                    <li><a href="{% url 'store' %}">All prices</a></li>
+                                                    <li><a href="#">All prices</a></li>
                                                     {% for price in prices %}
                                                     <li><a href="{{ price.get_url }}">{{ price.price}}</a></li>
                                                     {% endfor %}
@@ -156,7 +156,7 @@
                                 <div class="shop__product__option__right">
                                     <p>Sort by Price:</p>
                                     <select>
-                                        <option value="">aLow To High</option>
+                                        <option value="">Low To High</option>
                                         <option value="">$0 - $55</option>
                                         <option value="">$55 - $100</option>
                                     </select>
@@ -192,9 +192,7 @@
                                         <li class="fas fa-star disable"></li>
                                         <li class="disable">(1 reviews)</li>
                                     </ul>
-                                    <strong><h3 class="title"><a href="{{ product.get_url }}">{{ product.product_name }}</a></h3></strong>
-                                    <h6 class="title"><a class="price" href="{{ product.get_url }}">{{ product.brand.name }}</a></h6>
-
+                                    <h3 class="title"><a href="{{ product.get_url }}">{{ product.product_name }}</a></h3>
                                     <div class="price">₹ {{ product.price}}</div>
                                 </div>
                             </div>

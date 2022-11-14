@@ -291,7 +291,7 @@
     $(document).on('click',".update-item",function(){
         var _pId=$(this).attr('data-item');
         var _pQty=$(".product-qty-"+_pId).val();
-        var _vm=$(this);
+        var _vm=$(this); 
         console.log(_pQty)
         //Ajax
         $.ajax({

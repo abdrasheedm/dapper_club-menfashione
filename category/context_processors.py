@@ -1,4 +1,4 @@
-from .models import Category, Brand, Size, Color
+from .models import Category, Brand, Size, Color, PriceFilter
 from store.models import Product, ProductAttribute
 
 # def menu_links(request):
@@ -15,6 +15,7 @@ def get_filters(request):
     brands = Brand.objects.all()
     colors = Color.objects.all()
     sizes = Size.objects.all()
+    prices = PriceFilter.objects.all()
     # colors = ProductAttribute.objects.distinct().values('color__name', 'color__id', 'color__color_code')
     # sizes = ProductAttribute.objects.distinct().values('size__size', 'size__id')
     prods = Product.objects.all()
@@ -24,5 +25,6 @@ def get_filters(request):
         'colors':colors,
         'sizes':sizes,
         'prods':prods,
+        'prices':prices,
     }
     return data

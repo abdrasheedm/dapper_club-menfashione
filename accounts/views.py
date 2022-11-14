@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Account
 from .forms import RegistrationForm
+from carts.models import Cart, CartItem
 
 #  verification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -102,11 +103,30 @@ def signin(request):
 
         user = authenticate(request, email=email, password = password )
         if user is not None:
-            request.session['id'] = user.pk
-            login(request, user)
-            messages.success(request, "Logged in Succesfully")
-            return redirect('index')
+                print("hai")
+                if Cart.objects.filter(cart_id=request.session.session_key):
+                    cart = Cart.objects.get(cart_id = request.session.session_key)
+                    print("hai2")
+                    is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                    print("hai3")
+                    if is_cart_item_exists:
+                        print("hai4")
+                        cart_item = CartItem.objects.filter(cart=cart)
+                        print("hai5")
+                        for item in cart_item:
+                            item.user = user
+                            print("hai6")
+                            item.save()
+                            print("hai7")
 
+                # request.session['id'] = user.pk
+                login(request, user)
+                messages.success(request, "Logged in Succesfully")
+                return redirect('index')
+
+            # except:
+            #     print("hai000")
+            #     pass
         else:
             messages.error(request, "Invalid login credentials")
 

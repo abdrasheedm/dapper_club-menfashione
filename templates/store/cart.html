@@ -26,7 +26,8 @@
         <div class="row" id="cartList">
             <div class="col-lg-8">
                 <div class="shopping__cart__table">
-                    {% if single_product.items %}
+                    {% comment %} <!-- {% if single_product.items %} --> {% endcomment %}
+                    {% if cart_items %}
                     <table>
                         <thead>
                             <tr>
@@ -40,30 +41,31 @@
                         </thead>
                         <tbody>
                             
-                            {% for product_id,item in single_product.items %}
+                            {% comment %} <!-- {% for product_id,item in single_product.items %} --> {% endcomment %}
+                            {% for cart_item in cart_items %}
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <img src="{{ item.image }}" width="100" height="130" alt="">
+                                        <img src="{{ cart_item.product.product.image1.url }}" width="100" height="130" alt="">
                                     </div>
                                     <div class="product__cart__item__text">
-                                        <h6>{{item.name}}</h6>
-                                        <h5>{{item.price}}</h5>
+                                        <h6>{{cart_item.product.product.product_name}}</h6>
+                                        <h5>{{cart_item.product.product.price}}</h5>
                                     </div>
                                 </td>
                                 <td class="quantity__item">
                                     <div class="quantity">
                                         <div class="pro-qty-2">
-                                            <input class="product-qty-{{ product_id }}" type="text" value="{{item.qty}}">
+                                            <input class="product-qty-{{ cart_item.product.id }}" type="text" value="{{cart_item.quantity}}">
                                         </div>
                                     </div>
                                 </td>
                                 
-                                <td class="cart__price">{{ item.color}}</td>
-                                <td class="cart__price">{{ item.size}}</td>
-                                <td class="cart__price">{% widthratio item.price 1 item.qty %}</td>
-                                <td class="cart__close update-item" data-item="{{ product_id }}"><i class="fa fa-sync"></i></td>
-                                <td class="cart__close delete-item" data-item="{{ product_id }}"><i class="fa fa-close"></i></td>
+                                <td class="cart__price">{{ cart_item.product.color}}</td>
+                                <td class="cart__price">{{ cart_item.product.size}}</td>
+                                <td class="cart__price">{% widthratio cart_item.product.product.price 1 cart_item.quantity %}</td>
+                                <td class="cart__close update-item" data-item="{{ cart_item.product.id }}"><i class="fa fa-sync"></i></td>
+                                <td class="cart__close" data-item="{{ cart_item.product.id }}"><a href="{% url 'cart_delete' cart_item.product.id %}"><i class="fa fa-close"></i></a></td>
                             </tr>
                             {% endfor %}
                             {% else %}
@@ -88,7 +90,7 @@
                     </div> -->
                 </div>
             </div>
-            {% if single_product.items %}
+            {% if cart_items %}
             <div class="col-lg-4">
                 <div class="cart__discount">
                     <h6>Discount codes</h6>
