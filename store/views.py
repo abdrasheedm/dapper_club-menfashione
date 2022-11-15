@@ -2,14 +2,15 @@
 from django.shortcuts import get_object_or_404, render
 from store.models import Product, ProductAttribute
 from category.models import Category, Brand, Color, Size, PriceFilter
+from carts.models import Cart, CartItem
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def store(request, category_slug=None) :
-    if not request.session.session_key:
-        print('hai')
-        request.session.create()
+    # if not request.session.session_key:
+    #     print('hai')
+    #     request.session.create()
     categories = None
     products = None
     print(category_slug)
@@ -56,6 +57,10 @@ def store(request, category_slug=None) :
 
 
 def product_detail(request, sub_category_slug, product_slug):
+
+    if not request.session.session_key:
+        print('hai')
+        request.session.create()
     try:
         # single_product = Product.objects.get(sub_category__slug=sub_category_slug, slug=product_slug)
         # product_attr = ProductAttribute.objects.get(product__slug=product_slug)
@@ -172,21 +177,23 @@ def products_by_price(request, price_id):
 @login_required(login_url='signin')
 def checkout(request):
     context = {}
-    if 'cartdata' in request.session:
-        total_amount = 0
-        for p_id,item in request.session['cartdata'].items():
+    user=request.user
+    cart_items=CartItem.objects.filter(user=user, is_active=True)
+    total_amount = 0
+    for cart_item in cart_items:
 
-            total_amount += int(item['qty'])*float(item['price'])
+        total_amount += (cart_item.product.product.price * cart_item.quantity)
 
-        tax = round((18 * float(total_amount))/100)
-        sub_total = total_amount - tax
-        context = {
-            'total_amount':total_amount,
-            'tax':tax,
-            'sub_total':sub_total,
-            'single_product':request.session['cartdata']
-        }
-        # request.session['total_price'] = total_amount
+
+    tax = round((18 * float(total_amount))/100)
+    sub_total = total_amount - tax
+    context = {
+        'total_amount':total_amount,
+        'tax':tax,
+        'sub_total':sub_total,
+        'cart_items':cart_items,
+        # 'single_product':request.session['cartdata']
+    }
     return render(request, 'store/checkout.html', context)
 
 

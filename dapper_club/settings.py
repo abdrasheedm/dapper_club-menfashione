@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'category',
     'store',
     'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -89,9 +91,9 @@ AUTH_USER_MODEL = 'accounts.Account'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dapp306',
-        'USER' : 'postgres',
-        'PASSWORD' : 'Rashi123',
+        'NAME': config('DATABASE_NAME'),
+        'USER' : config('DATABASE_USER'),
+        'PASSWORD' : config('DATABASE_PASSWORD'),
         'HOST' : 'localhost'
     }
 }
@@ -156,12 +158,12 @@ MESSAGE_TAGS = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'dapperclub306@gmail.com'
-EMAIL_HOST_PASSWORD = 'uokflxjdplydzplw'
+EMAIL_HOST_USER = config('EMAIL_ID')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 
 # twilio
-ACCOUNT_SID = 'AC7e236c60490cfb22ddfd72f123ca7a1f'
-AUTH_TOKEN = '2196f91132467fe6644f6032e52a2019'
-SERVICE_ID = 'VA2a39ee1246fb5d1d148cff7d0f750995'
+ACCOUNT_SID = config('ACCOUNT_SID')
+AUTH_TOKEN = config('AUTH_TOKEN')
+SERVICE_ID = config('SERVICE_ID')
