@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def store(request, category_slug=None) :
-
+    if not request.session.session_key:
+        print('hai')
+        request.session.create()
     categories = None
     products = None
     print(category_slug)

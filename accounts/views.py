@@ -113,11 +113,32 @@ def signin(request):
                         print("hai4")
                         cart_item = CartItem.objects.filter(cart=cart)
                         print("hai5")
+                        product_variation = []
                         for item in cart_item:
-                            item.user = user
-                            print("hai6")
-                            item.save()
-                            print("hai7")
+                            variation = item.product.all()
+                            product_variation.append(list(variation))
+
+                        cart_item = CartItem.objects.filter(user=user)
+                        ex_var_list = []
+                        id = []    
+
+                        for item in cart_item:
+                            existing_variation = item.product.all()
+                            ex_var_list.append(list(existing_variation))
+                            id.append(item.id)
+
+                        for pr in product_variation:
+                            if pr in ex_var_list:
+                                index = ex_var_list.index(pr)
+                                item_id = id[index]
+                                item = CartItem.objects.get(id=item_id)
+                                item.user = user
+                                item.save()
+                            else:
+                                cart_item = CartItem.objects.filter(cart=cart)
+                                for item in cart_item:
+                                    item.user = user
+                                    item.save()
 
                 # request.session['id'] = user.pk
                 login(request, user)

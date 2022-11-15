@@ -29,21 +29,37 @@ def add_to_cart(request):
     try:
         cart = Cart.objects.get(cart_id = request.session.session_key) # get the cart using the cart_id present in the session
     except Cart.DoesNotExist:
-            cart = Cart.objects.create(cart_id = request.session.session_key)
-            cart.save()
-    
-    is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
-    if is_cart_item_exists:
-        cart_item = CartItem.objects.filter(product=product, cart=cart)
-            # existing_variations -> database
-            # current variation -> product_variation
-            # item_id -> database
+        cart = Cart.objects.create(cart_id = request.session.session_key)
+        cart.save()
+    if current_user.is_authenticated:
+        is_cart_item_exists = CartItem.objects.filter(product=product, user=current_user).exists()
+        if is_cart_item_exists:
+            cart_item = CartItem.objects.filter(product=product, user=current_user)
+            cart_item.quantity = request.GET['qty']
+            cart_item.save()
+
+            
+        else:
+            cart_item = CartItem.objects.create(
+                    product = product,
+                    quantity = request.GET['qty'],
+                    user = current_user,
+                )
     else:
-        cart_item = CartItem.objects.create(
-                product = product,
-                quantity = request.GET['qty'],
-                cart = cart,
-            )
+        is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
+        if is_cart_item_exists:
+            cart_item = CartItem.objects.filter(product=product, cart=cart)
+            cart_item.quantity = request.GET['qty']
+            cart_item.save()
+                # existing_variations -> database
+                # current variation -> product_variation
+                # item_id -> database
+        else:
+            cart_item = CartItem.objects.create(
+                    product = product,
+                    quantity = request.GET['qty'],
+                    cart = cart,
+                )
     # return redirect('cart')
     # if 'cartdata' in request.session:
     #         cart = Cart.objects.get(cart_id = request.session.session_key)
