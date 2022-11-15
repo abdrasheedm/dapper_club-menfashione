@@ -54,9 +54,9 @@ def place_order(request):
             context = {
                 'order': order,
                 'cart_items': cart_items,
-                'total': sub_total,
+                'sub_total': sub_total,
                 'tax': tax,
-                'grand_total': total_amount,
+                'total_amount': total_amount,
             }
             return render(request, 'orders/payment.html', context)
     return redirect('index')

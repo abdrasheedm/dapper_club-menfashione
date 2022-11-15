@@ -63,4 +63,7 @@ $(document).ready(function(){
 	// $(".product-price").text(_price);
 
 
+	// place order with razorpay
+
+
 });

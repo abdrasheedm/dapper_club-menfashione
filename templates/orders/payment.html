@@ -44,7 +44,8 @@
                 <div class="card">
 					<h5 class="card-header">Payment Method</h5>
 					<div class="card-body">
-						<p class="card-text">PayPal</p>
+						<p class="card-text">Razorpay</p>
+						<p class="card-text">Cash on delivery</p>
 
 					</div>
 				</div>
@@ -100,9 +101,10 @@
                     <ul>
                         <li>Subtotal <span>₹ {{ sub_total }}</span></li>
                         <li>Tax <span>₹ {{ tax }}</span></li>
-                        <li>Total <span>₹ {{ total_amount }}</span></li>
+                        <li>Total <span class="total_amount" total="{{ total_amount }}">₹ {{ total_amount }}</span></li>
                     </ul>
-                    <a href="{% url 'checkout' %}" class="primary-btn">Pay now</a>
+                    <a href="{% url 'checkout' %}" class="primary-btn btn-warning mb-2">COD</a> 
+                    <a href="" class="primary-btn payWithRazorpay">Pay with Razorpay</a> 
                 </div>
             </div>
 
@@ -110,5 +112,13 @@
     </div>
 </section>
 <!-- Shopping Cart Section End -->
+{% block script %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
+
+
+    {% endblock %}
 {% endblock %}
+
+
 

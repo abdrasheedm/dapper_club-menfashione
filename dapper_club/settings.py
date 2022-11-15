@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'store',
     'carts',
     'orders',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -167,3 +168,7 @@ EMAIL_USE_TLS = True
 ACCOUNT_SID = config('ACCOUNT_SID')
 AUTH_TOKEN = config('AUTH_TOKEN')
 SERVICE_ID = config('SERVICE_ID')
+
+#Razorpay
+RAZOR_KEY_ID=config('MY_KEY_ID')
+RAZOR_KEY_SECRET=config('MY_KEY_SECRET')
