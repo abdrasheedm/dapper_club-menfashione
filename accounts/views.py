@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Account
 from .forms import RegistrationForm
 from carts.models import Cart, CartItem
+from orders.models import OrderProduct, Order
 import requests
 
 #  verification email
@@ -175,11 +176,21 @@ def signout(request):
 
 @login_required(login_url='signin')
 def dashboard(request):
-    return render(request, 'accounts/user_dashboard/dashboard.html')
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    order_count = orders.count()
+    context = {
+        'orders':orders,
+        'order_count':order_count,
+    }
+    return render(request, 'accounts/user_dashboard/dashboard.html', context)
 
 
 def my_order(request):
-    return render(request, 'accounts/user_dashboard/my_orders.html')
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    context = {
+        'orders':orders,
+    }
+    return render(request, 'accounts/user_dashboard/my_orders.html', context)
 
 
 def my_profile(request):

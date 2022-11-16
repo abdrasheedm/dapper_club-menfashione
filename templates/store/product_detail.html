@@ -103,7 +103,7 @@
                                     <span>Size:</span>
                                     {% for size in sizes %}
 
-                                    <button class="btn btn-sm btn-outline-secondary choose-size size{{ size.id }} color{{size.color__id}}" prod-id="{{ size.id }}" >{{ size.size__size }}</button>
+                                    <button class="btn btn-sm btn-outline-secondary choose-size size{{ size.id }} color{{size.color__id}} stock-{{size.id}}" prod-id="{{ size.id }}" stock="{{size.stock}}" >{{ size.size__size }}</button>
 
                                     
                                     <!-- <label class="choose-size color{{size.color__id}}" data-size="{{ size.id }}" for="">{{ size.size__size }}
@@ -133,9 +133,9 @@
                                 </div>
                             </div>
                             <div class="product__details__cart__option">
-                                {% if .stock <= 0 %}
-                                 <b><h4 class="text-danger">Out of Stock<h4></b>
-                                {% else %}
+                               
+                                 <b><h4 class="text-danger out-of-stock">Out of Stock<h4></b>
+                              
                                     <input type="hidden" value="{{ product.id }}" class="prod_id" >
                                 <div class="quantity">
                                     <div class="pro-qty">
@@ -144,7 +144,7 @@
                                 </div>
                                 
                                 <a href="#" class="primary-btn addtocart" id="addToCartBtn">add to cart</a>
-                                {% endif %}
+                              
                             </div>
                             <div class="product__details__btns__option">
                                 <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>

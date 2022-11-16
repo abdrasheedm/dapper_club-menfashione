@@ -2,6 +2,7 @@ $(document).ready(function(){
 
     // Product Variation
 	$(".choose-size").hide();
+	$(".out-of-stock").hide();
 
 	// Show size according to selected color
 	$(".choose-color").on('click',function(){
@@ -35,6 +36,21 @@ $(document).ready(function(){
 	$(".choose-size").on('click',function(){
 
 		var _pId=$(this).attr('prod-id');
+		var stock=$('.stock-'+_pId).attr('stock');
+
+		if(stock<=0){
+
+			$(".addtocart").hide();
+			$(".out-of-stock").show();
+
+			console.log("out of stock")
+		}
+		
+		else{
+		console.log("in stock")
+		$(".addtocart").show();
+		$(".out-of-stock").hide();
+		}
 
 
 		$(".choose-size").removeClass('active');
@@ -44,6 +60,8 @@ $(document).ready(function(){
 		$(".size"+_pId).addClass('prod-id');
 
 		console.log(_pId+'prod-id')
+		console.log(stock+' stock')
+
 
 		// $(".choose-size").hide();
 		// $(".color"+_color).show();

@@ -20,7 +20,7 @@ def store(request, category_slug=None) :
     if category_slug != None:
 
         categories = get_object_or_404(Category, slug=category_slug)
-        products = Product.objects.filter(sub_category__category=categories)
+        products = Product.objects.filter(sub_category__category=categories) 
         paginator = Paginator(products, 12)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
@@ -67,7 +67,7 @@ def product_detail(request, sub_category_slug, product_slug):
         product = Product.objects.get(slug=product_slug)
         related_products = Product.objects.filter(sub_category__category=product.sub_category.category).exclude(slug=product_slug)[:4]
         colors=ProductAttribute.objects.filter(product=product).values('color__id','color__name','color__color_code').distinct()
-        sizes=ProductAttribute.objects.filter(product=product).values('id','size__id','size__size','color__id').distinct()
+        sizes=ProductAttribute.objects.filter(product=product).values('id','size__id','size__size','color__id', 'stock').distinct()
         price = ProductAttribute.objects.filter(product=product).first()
         print(sizes.count())
         print(product.price)

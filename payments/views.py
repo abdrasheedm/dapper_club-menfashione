@@ -10,8 +10,8 @@ from store.models import ProductAttribute
 
 
 # authorize razorpay client with API Keys.
-razorpay_client = razorpay.Client(
-    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+# razorpay_client = razorpay.Client(
+#     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 def pay_with_razorpay(request):
     payment = Payment()
@@ -28,6 +28,7 @@ def pay_with_razorpay(request):
     order = Order.objects.get(user=request.user, order_number=order_number)
     order.payment = payment
     order.is_ordered = True
+    order.status ='Accepted'
     order.save()
 
     cart_items = CartItem.objects.filter(user=request.user)
