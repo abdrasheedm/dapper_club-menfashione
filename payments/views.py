@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 
 from orders.models import Payment, Order, OrderProduct
 from carts.models import CartItem
+from store.models import ProductAttribute
 
 
 # authorize razorpay client with API Keys.
@@ -26,6 +27,7 @@ def pay_with_razorpay(request):
     order_number = request.POST.get('order_number')
     order = Order.objects.get(user=request.user, order_number=order_number)
     order.payment = payment
+    order.is_ordered = True
     order.save()
 
     cart_items = CartItem.objects.filter(user=request.user)
@@ -38,10 +40,38 @@ def pay_with_razorpay(request):
             quantity=cart_item.quantity,
             product_price=cart_item.product.product.price,
             ordered = True
-
-
         )
+        product = ProductAttribute.objects.get(id=cart_item.product.id)
+        product.stock -= cart_item.quantity
+        product.save()
+    
+    cart_items = CartItem.objects.filter(user=request.user)
+    cart_items.delete()
     # order_product.product = 
     # order_product.quantity = 
+    print("done")
+    pay_mode = request.POST.get('payment_mode')
+    if pay_mode == 'Paid by Razorpay':
+        return JsonResponse({'status':"Your order has been placed successfully "})
 
-    return HttpResponse("hai")
+    return redirect('/')
+
+
+
+def my_orders(request):
+    order_number = request.GET.get('order_number')
+    order = Order.objects.get(user=request.user, order_number=order_number)
+    ordered_products = OrderProduct.objects.filter(order=order)
+    total_amount = 0
+    for item in ordered_products:
+        total_amount += (item.product_price * item.quantity)
+    tax = round((18 * float(total_amount))/100)
+    sub_total = total_amount - tax
+    context = {
+        'order':order,
+        'ordered_products':ordered_products,
+        'sub_total':sub_total,
+        'tax':tax,
+        'total_amount':total_amount,
+    }
+    return render(request, 'orders/payment_complete.html', context)
