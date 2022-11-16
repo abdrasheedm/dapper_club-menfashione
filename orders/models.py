@@ -7,10 +7,10 @@ from carts.models import Cart, CartItem
 
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    payment_id = models.CharField(max_length=100)
+    payment_id = models.CharField(max_length=100, null=True, blank=True)
     payment_method = models.CharField(max_length=100)
     amount_paid = models.CharField(max_length=100) # this is the total amount paid
-    status = models.CharField(max_length=100)
+    status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -64,11 +64,11 @@ class OrderProduct(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
     # variations = models.ManyToManyField(ProductAttribute, blank=True)
-    # quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
     product_price = models.FloatField()
     ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.product.product_name
+    # def __str__(self):
+    #     return self.product.product

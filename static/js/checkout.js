@@ -2,22 +2,46 @@ $(document).ready(function () {
     $('.payWithRazorpay').click(function (e) { 
         e.preventDefault();
 
-		var total_amount=$('.total_amount').attr('total');
-        console.log(total_amount)
+		var amount_paid=$('.total_amount').attr('total');
+        var name =$('.name').attr('name');
+        var email =$('.email').attr('email');
+        var phone =$('.phone').attr('phone');
+        var order_number =$('.order_number').attr('order_number');
+        var token = $("[name='csrfmiddlewaretoken']").val();
+        console.log(amount_paid, name, email, phone)
+        console.log(order_number)
         
         var options = {
             "key": "rzp_test_as3wFrqkj7CetD", // Enter the Key ID generated from the Dashboard
-            "amount": total_amount*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "amount": "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
-            "name": "dapper club",
-            "description": "Test Transaction",
+            "name": "Dapper Club",
+            "description": "Thank you for buying from us",
             "image": "https://example.com/your_logo",
-            // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-            "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+            // "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                alert(response.razorpay_payment_id);
+                data = {
+                    "payment_mode":"Paid by Razorpay",
+                    "payment_id": response.razorpay_payment_id, 
+                    "order_number":order_number,
+                    "amount_paid":amount_paid,
+                    "csrfmiddlewaretoken":token
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/payment/pay-with-razorpay",
+                    data: data,
+                    success: function (response) {
+                        
+                    }
+                });
+                
+            },
             "prefill": {
-                "name": "Gaurav Kumar",
-                "email": "gaurav.kumar@example.com",
-                "contact": "9999999999"
+                "name": name,
+                "email": email,
+                "contact": phone
             },
             "notes": {
                 "address": "Razorpay Corporate Office"
@@ -28,6 +52,5 @@ $(document).ready(function () {
         };
         var rzp1 = new Razorpay(options);
         rzp1.open();
-        
     });
 });
