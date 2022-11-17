@@ -1,21 +1,18 @@
 
 from django.shortcuts import get_object_or_404, render
 from store.models import Product, ProductAttribute
+from accounts.models import UserProfile
 from category.models import Category, Brand, Color, Size, PriceFilter
-from carts.models import Cart, CartItem
+from carts.models import Cart, CartItem, WishlistItem
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def store(request, category_slug=None) :
-    # if not request.session.session_key:
-    #     print('hai')
-    #     request.session.create()
     categories = None
     products = None
     print(category_slug)
-
-    # brands = Brand.objects.all()
+    in_wishlist = WishlistItem
 
     if category_slug != None:
 
@@ -26,20 +23,8 @@ def store(request, category_slug=None) :
         paged_products = paginator.get_page(page)
         products_count = products.count()
 
-    # elif brand_slug != None:
-    #     print("hai")
-    #     brands = get_object_or_404(Brand, slug=brand_slug)
-    #     print("helllo")
-
-    #     products = ProductAttribute.objects.filter(product__brand = brands)
-    #     print("pooi")
-    #     products_count = products.count()
-
 
     else:
-        print("else")
-
-        # products = ProductAttribute.objects.distinct().values('product__product_name', 'price', 'product__image1')
         products = Product.objects.all().order_by('-id')
         paginator = Paginator(products, 12)
         page = request.GET.get('page')
@@ -62,28 +47,25 @@ def product_detail(request, sub_category_slug, product_slug):
         print('hai')
         request.session.create()
     try:
-        # single_product = Product.objects.get(sub_category__slug=sub_category_slug, slug=product_slug)
-        # product_attr = ProductAttribute.objects.get(product__slug=product_slug)
         product = Product.objects.get(slug=product_slug)
         related_products = Product.objects.filter(sub_category__category=product.sub_category.category).exclude(slug=product_slug)[:4]
         colors=ProductAttribute.objects.filter(product=product).values('color__id','color__name','color__color_code').distinct()
         sizes=ProductAttribute.objects.filter(product=product).values('id','size__id','size__size','color__id', 'stock').distinct()
         price = ProductAttribute.objects.filter(product=product).first()
-        print(sizes.count())
-        print(product.price)
+        in_wishlist=WishlistItem.objects.filter(product=product)
         
 
     except Exception as e:
         raise e
 
     context = {
-        # 'single_product':single_product,
-        # 'product_attr' : product_attr,
+   
         'related':related_products,
         'product':product,
         'sizes':sizes,
         'colors':colors,
         'price':price,
+        'in_wishlist':in_wishlist,
 
     }
     return render(request, 'store/product_detail.html', context)
@@ -150,6 +132,7 @@ def product_by_color(request, color_slug):
 def product_by_size(request, size_slug):
     sizes = get_object_or_404(Size, slug=size_slug)
     print("color")
+    print(sizes.count())
 
     products = ProductAttribute.objects.filter(size = sizes).order_by('-id')
     print("pooi")
@@ -179,6 +162,9 @@ def checkout(request):
     context = {}
     user=request.user
     cart_items=CartItem.objects.filter(user=user, is_active=True)
+    userprofile = UserProfile.objects.filter(user=request.user).first()
+    print(userprofile.address_line_1)
+    
     total_amount = 0
     for cart_item in cart_items:
 
@@ -192,6 +178,7 @@ def checkout(request):
         'tax':tax,
         'sub_total':sub_total,
         'cart_items':cart_items,
+        'userprofile':userprofile
         # 'single_product':request.session['cartdata']
     }
     return render(request, 'store/checkout.html', context)

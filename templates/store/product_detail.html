@@ -5,6 +5,8 @@
 
     <!-- Shop Details Section Begin -->
     <section class="shop-details">
+
+
         <div class="product__details__pic">
             <div class="container">
                 <div class="row">
@@ -77,6 +79,7 @@
         </div>
         <div class="product__details__content">
             <div class="container">
+
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="product__details__text">
@@ -147,7 +150,12 @@
                               
                             </div>
                             <div class="product__details__btns__option">
-                                <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
+                                {% if not in_wishlist %}
+                                <a href="" class="m-2 text-warning" id="addtowishlist" prod-id="{{ product.id }}" ><i class="fa fa-heart "></i> add to wishlist</a>
+                                {% else %}
+                                <div class="m-2 text-warning" ><i class="fa fa-heart "></i> In wishlist </div>
+                                {% endif %}
+
                                 <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
                             </div>
                             <div class="product__details__last__option">
@@ -306,9 +314,8 @@
                                         <!-- <img class="{{ product.get_url }}" src="{{ product.images2.url }}" width="200" height="200"> -->
                                     </a>
                                     <ul class="product-links">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-random"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                        <li><div id="addtowishlist" prod-id="{{ product.id }}"><i class="fa fa-heart"></i></div></li>
+                                        <li><div><i class="fa fa-random"></i></div></li>
                                     </ul>
                                     <a href="#" class="product-view"><i class="fa fa-search"></i></a>
                                 </div>

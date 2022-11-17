@@ -5,7 +5,7 @@ from store.models import Product, ProductAttribute
 # Create your models here.
 
     
-
+ 
 class Cart(models.Model):
     cart_id = models.CharField(max_length=250, blank=True)
     date_added = models.DateField(auto_now_add=True, null=True)
@@ -19,4 +19,10 @@ class CartItem(models.Model):
     product = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, null=True)
     cart    = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
+    is_active = models.BooleanField(default=True)
+
+
+class WishlistItem(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField(default=True)

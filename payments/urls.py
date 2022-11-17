@@ -2,7 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('pay-with-razorpay', views.pay_with_razorpay, name='pay_with_razorpay'),
+    path('order-payment', views.order_payment, name='order_payment'),
+
+    
     path('order-complete', views.order_complete, name='order-complete'),
     
 

@@ -86,7 +86,7 @@
     opacity: 1;
     transform: translateX(0); 
 }
-.product-grid .product-links li a{
+.product-grid .product-links li div{
     color: #000;
     background: #fff;
     font-size: 18px;

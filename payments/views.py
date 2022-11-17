@@ -13,10 +13,11 @@ from store.models import ProductAttribute
 # razorpay_client = razorpay.Client(
 #     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
-def pay_with_razorpay(request):
+def order_payment(request):
     payment = Payment()
     payment.user = request.user
-    payment.payment_id = request.POST.get('payment_id')
+    if request.POST.get('payment_id'):
+        payment.payment_id = request.POST.get('payment_id') 
     payment.payment_method = request.POST.get('payment_mode')
     payment.amount_paid = request.POST.get('amount_paid')
     payment.status=True
@@ -48,15 +49,8 @@ def pay_with_razorpay(request):
     
     cart_items = CartItem.objects.filter(user=request.user)
     cart_items.delete()
-    # order_product.product = 
-    # order_product.quantity =  
-    print("done")
-    pay_mode = request.POST.get('payment_mode')
-    if pay_mode == 'Paid by Razorpay':
-        return JsonResponse({'status':"Your order has been placed successfully "})
-
-    return redirect('/')
-
+    return JsonResponse({'status':"Your order has been placed successfully "})
+ 
 
 
 def order_complete(request):

@@ -51,6 +51,8 @@ def place_order(request):
             data.order_number = order_number
             data.save()
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+            # payment_mode = form.cleaned_data['payment_methode']
+            # print(payment_mode)
             context = {
                 'order': order,
                 'cart_items': cart_items,

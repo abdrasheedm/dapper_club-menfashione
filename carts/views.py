@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http.response import JsonResponse
 from store.models import Product, ProductAttribute
-from .models import Cart, CartItem
+from .models import Cart, CartItem,WishlistItem
 from django.template.loader import render_to_string
+from django.contrib import messages
+
 
 
 # Create your views here.
@@ -37,6 +39,8 @@ def add_to_cart(request):
             cart_item = CartItem.objects.filter(product=product, user=current_user)
             cart_item.quantity = request.GET['qty']
             cart_item.save()
+            messages.success(request, 'Item added to cart.')
+            
 
             
         else:
@@ -45,12 +49,16 @@ def add_to_cart(request):
                     quantity = request.GET['qty'],
                     user = current_user,
                 )
+            messages.success(request, 'Item added to cart.')
+            
     else:
         is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
         if is_cart_item_exists:
             cart_item = CartItem.objects.filter(product=product, cart=cart)
             cart_item.quantity = request.GET['qty']
             cart_item.save()
+            messages.success(request, 'Item added to cart.')
+
                 # existing_variations -> database
                 # current variation -> product_variation
                 # item_id -> database
@@ -60,6 +68,8 @@ def add_to_cart(request):
                     quantity = request.GET['qty'],
                     cart = cart,
                 )
+            messages.success(request, 'Item added to cart.')
+            
     # return redirect('cart')
     # if 'cartdata' in request.session:
     #         cart = Cart.objects.get(cart_id = request.session.session_key)
@@ -178,7 +188,7 @@ def cart(request):
 
 def cart_delete(request, prod_id):
     # p_id = str(request.GET['id'])
-    current_user=request.user
+    current_user=request.user 
     product = get_object_or_404(ProductAttribute, id=prod_id)
     if current_user.is_authenticated:
         cart_item=CartItem.objects.get(user=current_user, product=product)
@@ -254,3 +264,41 @@ def cart_update(request):
     # }
     t = render_to_string('store/ajax/cart-list.html', context)
     return JsonResponse({'data':t})
+
+
+def add_to_wishlist(request):
+    user = request.user
+    product_id = request.GET['id']
+    product = Product.objects.get(id=product_id)
+    print(user, product)
+    is_wished = WishlistItem.objects.filter(product=product)
+    if not is_wished:
+        print("yes")
+        product = WishlistItem.objects.create(
+            user=user,
+            product=product,
+            is_active=True,
+        )
+        messages.success(request, 'Item added to wishlist.')
+    
+    else:
+        print("no")
+
+        messages.success(request, 'Item already in wishlist.')
+    
+    return JsonResponse({'single_product':'success'})
+
+
+def wishlist(request):
+    products = WishlistItem.objects.filter(user=request.user, is_active=True)
+
+    return render(request, 'store/wishlist.html', {'products':products})
+
+
+def delete_from_wishlist(request):
+    prod_id = request.GET['id']
+    print(prod_id)
+    product = Product.objects.get(id=prod_id)
+    wishlist_item = WishlistItem.objects.get(product=product)
+    wishlist_item.delete()
+    return redirect('wishlist')

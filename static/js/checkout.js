@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // payment with razorpay
     $('.payWithRazorpay').click(function (e) { 
         e.preventDefault();
 
@@ -20,7 +21,7 @@ $(document).ready(function () {
             "image": "https://example.com/your_logo",
             // "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response){
-                alert(response.razorpay_payment_id);
+                // alert(response.razorpay_payment_id);
                 data = {
                     "payment_mode":"Paid by Razorpay",
                     "payment_id": response.razorpay_payment_id, 
@@ -30,7 +31,7 @@ $(document).ready(function () {
                 }
                 $.ajax({
                     type: "POST",
-                    url: "/payment/pay-with-razorpay",
+                    url: "/payment/order-payment",
                     data: data,
                     success: function (responsec) {
                         swal("Congratulations !", responsec.status, "success").then((value) => {
@@ -57,5 +58,42 @@ $(document).ready(function () {
         };
         var rzp1 = new Razorpay(options);
         rzp1.open();
+    });// end of razorpay payment
+
+    //cash on delivery
+    $('.cod').click(function (e) { 
+        e.preventDefault();
+        var amount_paid=$('.total_amount').attr('total');
+        var order_number =$('.order_number').attr('order_number');
+        var token = $("[name='csrfmiddlewaretoken']").val();
+
+
+        //ajax start
+        data = {
+            "payment_mode":"Cash on delivery", 
+            "order_number":order_number,
+            "amount_paid":amount_paid,
+            // "payment_id": 'None', 
+            "csrfmiddlewaretoken":token
+
+        }
+        $.ajax({
+            type: "POST",
+            url: "/payment/order-payment",
+            data: data,
+            success: function (responsec) {
+                swal("Congratulations !", responsec.status, "success").then((value) => {
+                    window.location.href = '/payment/order-complete'+'?order_number='+order_number
+                    console.log(order_number)
+
+                  });
+
+            }
+        });
+        // ajax end
+
+
+
+        
     });
 });
