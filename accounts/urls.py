@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('dashboard/', views.dashboard, name='dashboard'),
     path('my_order/', views.my_order, name='my_order'),
+    path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
     path('my_profile/', views.my_profile, name='my_profile'),    
     path('my_address/', views.my_address, name='my_address'),
     path('my_coupon/', views.my_coupon, name='my_coupon'),

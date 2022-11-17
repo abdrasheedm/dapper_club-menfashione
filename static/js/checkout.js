@@ -34,7 +34,7 @@ $(document).ready(function () {
                     data: data,
                     success: function (responsec) {
                         swal("Congratulations !", responsec.status, "success").then((value) => {
-                            window.location.href = '/payment/my-orders'+'?order_number='+order_number
+                            window.location.href = '/payment/order-complete'+'?order_number='+order_number
                             console.log(order_number)
 
                           });

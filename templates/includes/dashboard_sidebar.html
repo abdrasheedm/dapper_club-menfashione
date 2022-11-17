@@ -4,8 +4,8 @@
       <a class="list-group-item {% if '/dashboard/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card  mb-1 " href="{% url 'dashboard' %}"> Dashboard </a>
       <a class="list-group-item {% if '/my_order/' in request.path %}bg-white text-dark  {% else %} bg-dark text-white {% endif %} card mb-1 "  href="{% url 'my_order' %}"> My Orders </a>
       <a class="list-group-item {% if '/my_profile/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card mb-1 " href="{% url 'my_profile' %}"> Edit Profile </a>
-      <a class="list-group-item {% if '/my_address/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card mb-1 " href="{% url 'my_address' %}"> Manage Address </a>
-      <a class="list-group-item {% if '/my_coupon/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card mb-1 " href="{% url 'my_coupon' %}"> My coupons </a>
+      {% comment %} <a class="list-group-item {% if '/my_address/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card mb-1 " href="{% url 'my_address' %}"> Manage Address </a> {% endcomment %}
+      {% comment %} <a class="list-group-item {% if '/my_coupon/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card mb-1 " href="{% url 'my_coupon' %}"> My coupons </a> {% endcomment %}
       <a class="list-group-item {% if '/change_password/' in request.path %}bg-white text-dark {% else %} bg-dark text-white {% endif %} card mb-1 " href="{% url 'change_password' %}"> Change Password </a>
     </ul>
     <br>

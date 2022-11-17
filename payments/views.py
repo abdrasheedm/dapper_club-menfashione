@@ -49,7 +49,7 @@ def pay_with_razorpay(request):
     cart_items = CartItem.objects.filter(user=request.user)
     cart_items.delete()
     # order_product.product = 
-    # order_product.quantity = 
+    # order_product.quantity =  
     print("done")
     pay_mode = request.POST.get('payment_mode')
     if pay_mode == 'Paid by Razorpay':
@@ -59,7 +59,7 @@ def pay_with_razorpay(request):
 
 
 
-def my_orders(request):
+def order_complete(request):
     order_number = request.GET.get('order_number')
     order = Order.objects.get(user=request.user, order_number=order_number)
     ordered_products = OrderProduct.objects.filter(order=order)

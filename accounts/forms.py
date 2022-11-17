@@ -1,4 +1,4 @@
-from .models import Account
+from .models import Account, UserProfile
 from django import forms
 
 
@@ -35,17 +35,25 @@ class RegistrationForm(forms.ModelForm):
 
 
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ('first_name', 'last_name', 'phone_number')
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
 
 
-# class CustomUserForm(UserCreationForm):
-#     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2', 'placeholder' : 'Enter first name'}))
-#     last_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2', 'placeholder' : 'Enter last name'}))
-#     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2', 'placeholder' : 'Enter username'}))
-#     email = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control my-2', 'placeholder' : 'Enter email'}))
-#     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control my-2', 'placeholder' : 'Enter Password'}))
-#     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control my-2', 'placeholder' : 'confirm password'}))
 
-#     class Meta:
-#         model = User
-#         fields = ['first_name','last_name','username', 'email','password1','password2']
+class UserProfileForm(forms.ModelForm):
+    profile_picture = forms.ImageField(required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
+    class Meta:
+        model = UserProfile
+        fields = ('address_line_1', 'address_line_2', 'city', 'state', 'country', 'profile_picture')
 
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'

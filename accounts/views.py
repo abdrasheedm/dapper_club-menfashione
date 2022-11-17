@@ -1,12 +1,12 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
-from .models import Account
-from .forms import RegistrationForm
+from .models import Account, UserProfile
+from .forms import RegistrationForm, UserProfileForm, UserForm
 from carts.models import Cart, CartItem
 from orders.models import OrderProduct, Order
 import requests
@@ -184,19 +184,53 @@ def dashboard(request):
     }
     return render(request, 'accounts/user_dashboard/dashboard.html', context)
 
-
+@login_required(login_url='signin')
 def my_order(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True)
     context = {
         'orders':orders,
     }
-    return render(request, 'accounts/user_dashboard/my_orders.html', context)
+    return render(request, 'accounts/user_dashboard/my_orders.html', context) 
 
 
-def my_profile(request):
-    form = RegistrationForm()
+@login_required(login_url='signin')
+def order_detail(request, order_id):
+    print(order_id)
+    order = Order.objects.get(user=request.user, order_number=order_id)
+    ordered_products = OrderProduct.objects.filter(order=order)
+    total_amount = 0
+    for item in ordered_products:
+        total_amount += (item.product_price * item.quantity)
+    tax = round((18 * float(total_amount))/100)
+    sub_total = total_amount - tax
     context = {
-        'form' : form
+        'order':order,
+        'ordered_products':ordered_products,
+        'sub_total':sub_total,
+        'tax':tax,
+        'total_amount':total_amount,
+    }
+    return render(request, 'orders/order_detail.html', context)
+
+
+@login_required(login_url='signin')
+def my_profile(request):
+    userprofile = get_object_or_404(UserProfile, user=request.user)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('my_profile')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'userprofile': userprofile,
     }
     return render(request, 'accounts/user_dashboard/my_profile.html', context)
 
@@ -207,7 +241,29 @@ def my_address(request):
 def my_coupon(request):
     return render(request, 'accounts/user_dashboard/my_coupon.html')
 
+
+@login_required(login_url='signin')
 def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+
+        user = Account.objects.get(username__exact=request.user.username)
+
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password updated successfully.')
+                return redirect('change_password')
+            else:
+                messages.error(request, 'Please enter valid current password')
+                return redirect('change_password')
+        else:
+            messages.error(request, 'Password does not match!')
+            return redirect('change_password')
     return render(request, 'accounts/user_dashboard/change_password.html')
 
 
