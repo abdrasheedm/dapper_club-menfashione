@@ -105,15 +105,19 @@
                         <li>Tax <span>₹ {{ tax }}</span></li>
                         <li>Total <span class="total_amount" total="{{ total_amount }}">₹ {{ total_amount }}</span></li>
                     </ul>
-                    <a href="" class="primary-btn btn-warning mb-2 cod">COD</a> 
-                    <a href="" class="primary-btn payWithRazorpay">Pay with Razorpay</a> 
+                    {% if payment_mode == 'cash on delivery' %}
+                    <a href="" class="primary-btn btn-warning mb-2 cod">Pay on Delivery</a> 
+                    {% else %}
+                    <a href="" class="primary-btn btn-warning payWithRazorpay">Pay with Razorpay</a> 
+                    {% endif %}
+
                 </div>
             </div>
 
         </div>
     </div>
 </section>
-<!-- Shopping Cart Section End -->
+<!-- Shopping Cart Section End --> 
 {% block script %}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{% static 'js/checkout.js' %}"></script>

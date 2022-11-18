@@ -1,4 +1,5 @@
 from .models import Category, Brand, Size, Color, PriceFilter
+from carts.models import CartItem
 from store.models import Product, ProductAttribute
 
 # def menu_links(request):
@@ -19,6 +20,11 @@ def get_filters(request):
     # colors = ProductAttribute.objects.distinct().values('color__name', 'color__id', 'color__color_code')
     # sizes = ProductAttribute.objects.distinct().values('size__size', 'size__id')
     prods = Product.objects.all()
+    if request.user.is_authenticated:
+        cart_items = CartItem.objects.filter(user=request.user)
+    else:
+        cart_items = CartItem.objects.filter(cart=request.session.session_key)
+
     data = {
         'cats':cats,
         'brands':brands,
@@ -26,5 +32,6 @@ def get_filters(request):
         'sizes':sizes,
         'prods':prods,
         'prices':prices,
+        'cart_items':cart_items,
     }
     return data

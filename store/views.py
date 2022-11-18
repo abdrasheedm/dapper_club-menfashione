@@ -1,9 +1,12 @@
 
-from django.shortcuts import get_object_or_404, render
-from store.models import Product, ProductAttribute
+from django.shortcuts import get_object_or_404, render, redirect
+from store.models import Product, ProductAttribute, ReviewRating
 from accounts.models import UserProfile
 from category.models import Category, Brand, Color, Size, PriceFilter
 from carts.models import Cart, CartItem, WishlistItem
+from orders.models import OrderProduct
+from .forms import ReviewForm
+from django.contrib import messages
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
 
@@ -43,6 +46,8 @@ def store(request, category_slug=None) :
 
 def product_detail(request, sub_category_slug, product_slug):
 
+    print("hai")
+
     if not request.session.session_key:
         print('hai')
         request.session.create()
@@ -58,6 +63,13 @@ def product_detail(request, sub_category_slug, product_slug):
     except Exception as e:
         raise e
 
+
+    try:
+        is_ordered = OrderProduct.objects.filter(user=request.user, product__product=product).exists()
+
+    except OrderProduct.DoesNotExist:
+        is_ordered = None
+
     context = {
    
         'related':related_products,
@@ -66,6 +78,7 @@ def product_detail(request, sub_category_slug, product_slug):
         'colors':colors,
         'price':price,
         'in_wishlist':in_wishlist,
+        'is_ordered':is_ordered,
 
     }
     return render(request, 'store/product_detail.html', context)
@@ -131,11 +144,12 @@ def product_by_color(request, color_slug):
 
 def product_by_size(request, size_slug):
     sizes = get_object_or_404(Size, slug=size_slug)
-    print("color")
-    print(sizes.count())
+    print(sizes)
 
-    products = ProductAttribute.objects.filter(size = sizes).order_by('-id')
-    print("pooi")
+    products = ProductAttribute.objects.filter(size = sizes)
+    print(products)
+    # products = Product.objects.filter(product_name = products.product_name)
+    
     products_count = products.count()
     context = {
         'products':products,
@@ -163,7 +177,6 @@ def checkout(request):
     user=request.user
     cart_items=CartItem.objects.filter(user=user, is_active=True)
     userprofile = UserProfile.objects.filter(user=request.user).first()
-    print(userprofile.address_line_1)
     
     total_amount = 0
     for cart_item in cart_items:
@@ -182,6 +195,37 @@ def checkout(request):
         # 'single_product':request.session['cartdata']
     }
     return render(request, 'store/checkout.html', context)
+
+
+def submit_review(request, product_id):
+    url = request.META.get('HTTP_REFERER')
+    print("hai")
+    if request.method == 'POST':
+        try:
+            print("hai2")
+
+            reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
+            form = ReviewForm(request.POST, instance=reviews)
+            form.save()
+            messages.success(request, 'Thank you! Your review has been updated.')
+            return redirect(url)
+        except ReviewRating.DoesNotExist:
+            print("hai3")
+
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                data = ReviewRating() 
+                data.subject = form.cleaned_data['subject']
+                data.rating = form.cleaned_data['rating']
+                data.review = form.cleaned_data['review']
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.product_id = product_id
+                data.user_id = request.user.id
+                data.save()
+                print("ha6i")
+
+                messages.success(request, 'Thank you! Your review has been submitted.')
+                return redirect(url)
 
 
 

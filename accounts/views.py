@@ -186,7 +186,7 @@ def dashboard(request):
 
 @login_required(login_url='signin')
 def my_order(request):
-    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-id')
     context = {
         'orders':orders,
     }

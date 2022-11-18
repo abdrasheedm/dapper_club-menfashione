@@ -11,7 +11,8 @@
           <div class="breadcrumb__links">
             <a href="{% url 'index' %}">Home</a>
             <a href="{% url 'store' %}">Shop</a>
-            <span>Shopping Cart</span>
+            <a href="{% url 'cart' %}">Shopping Cart</a>
+            <span>checkout</span>
           </div>
         </div>
       </div>
@@ -70,7 +71,7 @@
                   <input type="text" name="city" value="{{ userprofile.city }}" class="form-control" required>
                 </div>
                 <div class="col form-group">
-                  <label for="">State</label>
+                  <label for="">State</label> 
                   <input type="text" name="state" value="{{ userprofile.state }}" class="form-control" required>
                 </div>
                 <div class="col form-group">
@@ -81,12 +82,12 @@
               </div>
               <div class="row mb-3">
                 <h4 class="card-title my-4">Select payment method:</h4>
-                <div class="col-6"><input type="radio" id="cash_on_delivery" name="payment_methode" value="cash_on_delivery" required>
+                <div class="col-6"><input type="radio" id="cash_on_delivery" name="payment_method" value="cash on delivery" required>
                   <label for="cash_on_delivery">CASH ON DELIVERY</label>
                 </div>
                 <div class="col-6">
-                  <input type="radio" id="razorpay" name="payment_methode" value="razorpay">
-                  <label for="razorpay">RAZORPAY</label>
+                  <input type="radio" id="razorpay" name="payment_method" value="razorpay">
+                  <label for="razorpay">RAZORPAY</label> 
                 </div>
               </div>
               <div class="form-row">

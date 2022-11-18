@@ -22,8 +22,11 @@ def place_order(request):
     sub_total = total_amount - tax
 
     if request.method == 'POST':
+        print("hai")
         form = OrderForm(request.POST)
+        print("hai")
         if form.is_valid():
+            print("hai")
             # Store all the billing information inside Order table
             data = Order()
             data.user = current_user
@@ -37,6 +40,7 @@ def place_order(request):
             data.state = form.cleaned_data['state']
             data.city = form.cleaned_data['city']
             data.order_note = form.cleaned_data['order_note']
+            data.payment_method = form.cleaned_data['payment_method']
             data.order_total = total_amount
             data.tax = tax
             data.ip = request.META.get('REMOTE_ADDR')
@@ -51,14 +55,17 @@ def place_order(request):
             data.order_number = order_number
             data.save()
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
-            # payment_mode = form.cleaned_data['payment_methode']
-            # print(payment_mode)
+            payment_mode = form.cleaned_data['payment_method']
+            print(payment_mode)
             context = {
                 'order': order,
                 'cart_items': cart_items,
                 'sub_total': sub_total,
                 'tax': tax,
                 'total_amount': total_amount,
+                'payment_mode':payment_mode,
             }
             return render(request, 'orders/payment.html', context)
-    return redirect('index')
+
+        
+    return redirect('checkout')

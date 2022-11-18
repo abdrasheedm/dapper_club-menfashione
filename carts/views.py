@@ -4,6 +4,7 @@ from store.models import Product, ProductAttribute
 from .models import Cart, CartItem,WishlistItem
 from django.template.loader import render_to_string
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -265,7 +266,7 @@ def cart_update(request):
     t = render_to_string('store/ajax/cart-list.html', context)
     return JsonResponse({'data':t})
 
-
+@login_required(login_url='signin')
 def add_to_wishlist(request):
     user = request.user
     product_id = request.GET['id']
@@ -289,6 +290,7 @@ def add_to_wishlist(request):
     return JsonResponse({'single_product':'success'})
 
 
+@login_required(login_url='signin')
 def wishlist(request):
     products = WishlistItem.objects.filter(user=request.user, is_active=True)
 
