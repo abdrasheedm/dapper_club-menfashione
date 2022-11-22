@@ -8,7 +8,7 @@
     <div class="row">
       {% include 'includes/manager_dashboard_sidebar.html' %}
       <main class="col-md-9 ">
-        <h2 class="text-center font-weight-bold text-dark my-5">Category Management</h2>
+        <h2 class="text-center font-weight-bold text-dark my-5">Variation Management</h2>
 
     <div class="d-flex mb-3 justify-content-end">
       <form action="{% url 'variation_management' %}" class="search" method="POST">
@@ -24,7 +24,7 @@
         </div>
       </form>
       <div>
-        <a href="" class="btn btn-dark ml-4">Add</a>
+        <a href="{% url 'add_variation' %}" class="btn btn-dark ml-4">Add</a>
       </div>
     </div>
 
@@ -58,8 +58,8 @@
                 <i class="fas fa-times-circle" style="color: #c21010"></i>
                 {% endif %}
               </td>
-              <td><a href="" class="btn btn-sm btn-warning">Update</a></td>
-              <td><a href="" class="btn btn-sm btn-dark">Delete</a></td>
+              <td><a href="{% url 'update_variation' variation.id %}" class="btn btn-sm btn-warning">Update</a></td>
+              <td><a href="{% url 'delete_variation' variation.id %}" class="btn btn-sm btn-dark">Delete</a></td>
             </tr>
             {% endfor %}
           </tbody>

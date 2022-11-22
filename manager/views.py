@@ -2,13 +2,14 @@ from django.shortcuts import render,redirect
 from accounts.models import Account
 from store.models import Product, ProductAttribute
 from orders.models import Order
-from category.models import Category
+from category.models import Category, SubCategory, Size, Color, PriceFilter, Brand
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password,check_password
 from django.contrib import messages
+from .forms import ProductForm, ProductAttributeForm, SubCategoryForm, CategoryForm, BrandForm
 
 
 
@@ -75,6 +76,8 @@ def user_unblock(request, user_id):
   return redirect('user_management')
 
 
+@never_cache
+@login_required(login_url='signin')
 def category_management(request):
     categories = Category.objects.all().order_by('id')
 
@@ -85,7 +88,138 @@ def category_management(request):
     return render(request, 'manager/category_management.html',context)
 
 
-#Mange product
+@never_cache
+@login_required(login_url='signin')
+def add_category(request):
+  if request.method == 'POST':
+    form = CategoryForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('category_management')
+  else:
+    form = CategoryForm()
+    context = {
+      'form': form
+    }
+  return render(request, 'manager/add_category.html', context)
+
+
+@never_cache
+@login_required(login_url='signin')
+def delete_category(request, category_id):
+  category = Category.objects.get(id=category_id)
+  category.delete()
+  return redirect('category_management')
+
+
+# Update Category
+@never_cache
+@login_required(login_url='login')
+def update_category(request, category_id):
+  category = Category.objects.get(id=category_id)
+  form = CategoryForm(instance=category)
+  
+  if request.method == 'POST':
+    try:
+      form = CategoryForm(request.POST, instance=category)
+      if form.is_valid():
+        form.save()
+        return redirect('category_management')
+    
+    except Exception as e:
+      raise e
+
+  context = {
+    'category': category,
+    'form': form
+  }
+  return render(request, 'manager/update_category.html', context)
+
+
+# Sub category management
+@never_cache
+@login_required(login_url='signin')
+def sub_category_management(request):
+    sub_categories = SubCategory.objects.all().order_by('id')
+
+    context = {
+        'sub_categories' :sub_categories
+    }
+
+    return render(request, 'manager/sub_category_management .html',context)
+
+
+@never_cache
+@login_required(login_url='signin')
+def add_sub_category(request):
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('sub_category_management')
+  else:
+    form = SubCategoryForm()
+    context = {
+      'form': form
+    }
+    return render(request, 'manager/add_sub_category.html', context)
+
+
+@never_cache
+@login_required(login_url='signin')
+def update_sub_category(request, sub_cat_id):
+  sub_category = SubCategory.objects.get(id = sub_cat_id)
+  form = SubCategoryForm(instance = sub_category)
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST, instance = sub_category)
+    form.save()
+
+    return redirect('sub_category_management')
+
+  context = {
+    'form' : form
+  }
+  return render(request, 'manager/update_sub_category.html', context)
+
+
+
+@never_cache
+@login_required(login_url='signin')
+def delete_sub_category(request, sub_cat_id):
+  sub_category = SubCategory.objects.get(id=sub_cat_id)
+  sub_category.delete()
+  return redirect('sub_category_management')
+
+
+@never_cache
+@login_required(login_url='signin')
+def brand_management(request):
+  brands = Brand.objects.all()
+  context = {
+    'brands': brands
+  }
+  return render(request, 'manager/brand_management.html', context)
+
+
+@never_cache
+@login_required(login_url='signin')
+def add_brand(request):
+  if request.method == 'POST':
+    form = BrandForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      return redirect('brand_management')
+
+  else:
+    form = BrandForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_brand.html', context)
+
+
+#Manage product
 @never_cache
 @login_required(login_url='signin')
 def product_management(request):
@@ -107,7 +241,7 @@ def product_management(request):
 
 # Add Product
 @never_cache
-@login_required(login_url='login')
+@login_required(login_url='signin')
 def add_product(request):
   if request.method == 'POST':
     form = ProductForm(request.POST, request.FILES)
@@ -120,6 +254,41 @@ def add_product(request):
       'form': form
     }
     return render(request, 'manager/add_product.html', context)
+
+# Edit Product
+@never_cache
+@login_required(login_url='signin')
+def edit_product(request, product_id):
+  product = Product.objects.get(id=product_id)
+  form = ProductForm(instance=product)
+  
+  if request.method == 'POST':
+    try:
+      form = ProductForm(request.POST, request.FILES, instance=product)
+      if form.is_valid():
+        form.save()
+        
+        return redirect('product_management')
+    
+    except Exception as e:
+      raise e
+
+  context = {
+    'product': product,
+    'form': form
+  }
+  return render(request, 'manager/edit_product.html', context)
+
+
+# Delete Product
+@never_cache
+@login_required(login_url='signin')
+def delete_product(request, product_id):
+  product = Product.objects.get(id=product_id)
+  product.delete()
+  return redirect('product_management')
+
+
 
 
   # Manage Order
@@ -137,6 +306,46 @@ def order_management(request):
     'orders': orders
   }
   return render(request, 'manager/order_management.html', context)
+
+
+# Accept Order
+@never_cache
+@login_required(login_url='signin')
+def accept_order(request, order_number):
+  order = Order.objects.get(order_number=order_number)
+  order.status = 'Shipped'
+  order.save()
+  
+  return redirect('order_management')
+
+
+
+
+# Complete Order
+@never_cache
+@login_required(login_url='login')
+def complete_order(request, order_number):
+  order = Order.objects.get(order_number=order_number)
+  order.status = 'Delivered'
+  order.save()
+  
+  return redirect('order_management')
+
+
+
+# Cancel Order
+@never_cache
+@login_required(login_url='login')
+def manager_cancel_order(request, order_number):
+  order = Order.objects.get(order_number=order_number)
+  order.status = 'Cancelled'
+  order.save()
+
+  if request.user.is_admin:
+    return redirect('admin_orders')
+
+  else:
+    return redirect('order_management')
 
 
   # Manage Variation
@@ -160,7 +369,58 @@ def variation_management(request):
   return render(request, 'manager/variation_management.html', context)
 
 
+# Add Variation
+@never_cache
+@login_required(login_url='signin')
+def add_variation(request):
+  
+  if request.method == 'POST':
+    form = ProductAttributeForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('variation_management')
+  
+  else:
+    form = ProductAttributeForm()
+  
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_variation.html', context)
 
+
+
+# update variation 
+@never_cache
+@login_required(login_url='signin')
+def update_variation(request, variation_id):
+  variation = ProductAttribute.objects.get(id = variation_id)
+  if request.method == 'POST':
+    form = ProductAttributeForm(request.POST, instance = variation)
+    if form.is_valid():
+      form.save()
+      return redirect('variation_management')
+  else:
+    form = ProductAttributeForm(instance = variation)
+
+  context = {
+    'form':form,
+    'variation':variation
+  }
+
+  return render(request, 'manager/update_variation.html', context)
+
+
+# delete variation 
+@never_cache 
+@login_required(login_url='signin')
+def delete_variation(request, variation_id):
+  variation = ProductAttribute.objects.get(id = variation_id)
+  variation.delete()
+  return redirect('variation_management')
+
+
+    
 # Admin orders
 @login_required(login_url='signin')
 def admin_order(request):

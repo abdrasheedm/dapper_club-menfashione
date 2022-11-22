@@ -10,7 +10,8 @@ from autoslug import AutoSlugField
 # Category
 class Category(models.Model):
     category_name   = models.CharField(max_length=50, unique=True)
-    slug            = models.SlugField(max_length=100, unique=True)
+    slug            = AutoSlugField(populate_from='category_name', unique=True, null=True, default=None)
+
 
 
 

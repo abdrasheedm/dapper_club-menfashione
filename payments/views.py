@@ -29,7 +29,7 @@ def order_payment(request):
     order = Order.objects.get(user=request.user, order_number=order_number)
     order.payment = payment
     order.is_ordered = True
-    order.status ='Accepted'
+    order.status ='Pending'
     order.save()
 
     cart_items = CartItem.objects.filter(user=request.user)

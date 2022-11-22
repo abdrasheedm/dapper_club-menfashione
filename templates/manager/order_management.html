@@ -51,15 +51,15 @@
                 {% endif %}
               </td>
               <td>
-                {% if order.status == '' %}
-                <a href="" class="btn btn-sm btn-light">Accept</a>
+                {% if order.status == 'Pending' %}
+                <a href="{% url 'accept_order' order.order_number %}" class="btn btn-sm btn-dark">Accept</a>
                 {% elif order.status == 'Shipped' %}
-                <a href="" class="btn btn-sm btn-light">Complete</a>
+                <a href="{% url 'complete_order' order.order_number %}" class="btn btn-sm btn-danger">Complete</a>
                 {% endif %}
               </td>
               <td>
                 {% if order.status == 'Accepted' or order.status == 'Shipped' %}
-                <a href=" " class="btn btn-sm btn-dark">Cancel</a>
+                <a href="{% url 'manager_cancel_order' order.order_number %}" class="btn btn-sm btn-dark">Cancel</a>
                 {% endif %}
               </td>
             </tr>

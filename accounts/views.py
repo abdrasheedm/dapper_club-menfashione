@@ -65,7 +65,7 @@ def register(request):
             return redirect('register')
 
     context = {'form':form}
-    return render(request, 'accounts/register.html', context)
+    return render(request, 'accounts/register.html', context) 
 
 
 
