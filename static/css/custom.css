@@ -44,8 +44,9 @@ label:hover ~ input:checked ~ label{
 .rating-star i{
   color: #ffb503 !important;
 }
+.rating-star .disable{ color: #a3a3a3 !important; } 
 
-ul.thumb{
+/* ul.thumb{
   margin:0 auto;
   padding: 0;
   float: left;
@@ -58,4 +59,4 @@ ul.thumb li img{
   width: 80px;
   height: 80px;
   border: 1px solid grey;
-}
+} */

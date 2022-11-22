@@ -69,3 +69,11 @@ def place_order(request):
 
         
     return redirect('checkout')
+
+
+def cancel_order(request, order_number):
+    order = Order.objects.get(order_number=order_number)
+    order.status = 'Cancelled'
+    order.save()
+
+    return redirect('my_order')

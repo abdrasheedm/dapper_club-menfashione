@@ -30,6 +30,10 @@ urlpatterns = [
 
     # ORDERS
     path('orders/', include('orders.urls')),
+    # MANAGER
+    path('manager/', include('manager.urls')),
+
+
 
 ]
 

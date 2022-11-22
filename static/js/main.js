@@ -220,7 +220,7 @@
         var product_qty = $("#qty-input").val();
         var product_prc = $(".prod_price").text();
         var product_name = $(".prod_name").text();
-        var product_clr = $(".color-title").attr('color');
+        var product_clr = $(".color-title").attr('color'); 
         var product_size = $(".prod-id").text();
         var product_image = $(".prod_img").val();
 
@@ -329,7 +329,7 @@
 
         // Ajax
         $.ajax({
-            url: '/cart/add-to-wishlist',
+            url: '/cart/wishlist/add-to-wishlist',
             data:{
                 'id':product_id,
             },

@@ -16,18 +16,8 @@ from django.contrib.auth.decorators import login_required
 #Add To Cart
 
 def add_to_cart(request):
-    # del request.session['cartdata']   
-    current_user=request.user
-    # cart_prod={}
-    # cart_prod[str(request.GET['id'])]={
-    #     'name':request.GET['name'],
-    #     'image':request.GET['image'],
-    #     'qty':request.GET['qty'],
-    #     'color':request.GET['color'],
-    #     'size':request.GET['size'],
-    #     'price':request.GET['price'],
-    # }
 
+    current_user=request.user
     product = ProductAttribute.objects.get(id__exact=request.GET['id'])
     try:
         cart = Cart.objects.get(cart_id = request.session.session_key) # get the cart using the cart_id present in the session
@@ -40,7 +30,7 @@ def add_to_cart(request):
             cart_item = CartItem.objects.filter(product=product, user=current_user)
             cart_item.quantity = request.GET['qty']
             cart_item.save()
-            messages.success(request, 'Item added to cart.')
+            # messages.success(request, 'Item added to cart.')
             
 
             
@@ -50,7 +40,7 @@ def add_to_cart(request):
                     quantity = request.GET['qty'],
                     user = current_user,
                 )
-            messages.success(request, 'Item added to cart.')
+            # messages.success(request, 'Item added to cart.')
             
     else:
         is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
@@ -69,7 +59,7 @@ def add_to_cart(request):
                     quantity = request.GET['qty'],
                     cart = cart,
                 )
-            messages.success(request, 'Item added to cart.')
+            # messages.success(request, 'Item added to cart.')
             
     # return redirect('cart')
     # if 'cartdata' in request.session:
@@ -131,12 +121,8 @@ def cart(request):
             print("ha1")
 
         else:
-            print("ha2")
             cart = Cart.objects.get(cart_id=request.session.session_key)
-            print("ha5")
-
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-            print("ha4")
 
         total_amount = 0
         for cart_item in cart_items:

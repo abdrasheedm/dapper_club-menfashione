@@ -46,18 +46,19 @@ def store(request, category_slug=None) :
 
 def product_detail(request, sub_category_slug, product_slug):
 
-    print("hai")
+    print("hai product", product_slug)
 
     if not request.session.session_key:
-        print('hai')
         request.session.create()
-    try:
+    try: 
         product = Product.objects.get(slug=product_slug)
         related_products = Product.objects.filter(sub_category__category=product.sub_category.category).exclude(slug=product_slug)[:4]
         colors=ProductAttribute.objects.filter(product=product).values('color__id','color__name','color__color_code').distinct()
         sizes=ProductAttribute.objects.filter(product=product).values('id','size__id','size__size','color__id', 'stock').distinct()
         price = ProductAttribute.objects.filter(product=product).first()
-        in_wishlist=WishlistItem.objects.filter(product=product)
+        in_wishlist = None
+        if request.user.is_authenticated:
+            in_wishlist=WishlistItem.objects.filter(user=request.user, product=product)
         
 
     except Exception as e:
@@ -67,9 +68,11 @@ def product_detail(request, sub_category_slug, product_slug):
     try:
         is_ordered = OrderProduct.objects.filter(user=request.user, product__product=product).exists()
 
-    except OrderProduct.DoesNotExist:
+    except:
         is_ordered = None
 
+    # show the reviews
+    reviews = ReviewRating.objects.filter(product=product, status=True)
     context = {
    
         'related':related_products,
@@ -79,8 +82,10 @@ def product_detail(request, sub_category_slug, product_slug):
         'price':price,
         'in_wishlist':in_wishlist,
         'is_ordered':is_ordered,
+        'reviews':reviews
 
     }
+    print("hai 6")
     return render(request, 'store/product_detail.html', context)
 
 
@@ -161,6 +166,14 @@ def product_by_size(request, size_slug):
 def products_by_price(request, price_id):
     price_filter = get_object_or_404(PriceFilter, id=price_id)
     products = Product.objects.filter(price_filter=price_filter).order_by('-id')
+
+    # cart_item = CartItem.objects.filter(user=request.user)
+    print("hai5")
+    # products = []
+    # for item in cart_item:
+    # product = CartItem.objects.get(product)
+    # print(product)
+    # products.append(list(product))
 
     products_count = products.count()
     context = {

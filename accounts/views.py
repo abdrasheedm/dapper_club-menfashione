@@ -27,7 +27,7 @@ from .otp_verification import *
 
 def register(request):
 
-    if 'id' in request.session:
+    if request.user.is_authenticated:
         return redirect('index')
 
     form = RegistrationForm()
@@ -95,8 +95,8 @@ def activate_email(request,uidb64, token):
 
 def signin(request):
 
-    if 'id' in request.session:
-        return redirect('id')
+    if request.user.is_authenticated:
+        return redirect('index')
 
     form = RegistrationForm()
     if request.method == 'POST':
@@ -115,36 +115,39 @@ def signin(request):
                         print("hai4")
                         cart_item = CartItem.objects.filter(cart=cart)
                         print("hai5")
-                        # product_variation = []
+                        # products = []
                         # for item in cart_item:
-                        #     variation = item.product.all()
-                        #     product_variation.append(list(variation))
-
+                        #     product = item.product
+                        #     products.append(product)
+                        # print(products)
                         # cart_item = CartItem.objects.filter(user=user)
-                        # ex_var_list = []
-                        # id = []    
-
+                        # ex_product_list = []
+                        # id = []
                         # for item in cart_item:
-                        #     existing_variation = item.product.all()
-                        #     ex_var_list.append(list(existing_variation))
+                        #     existing_product = item.product
+                        #     ex_product_list.append(existing_product)
                         #     id.append(item.id)
 
-                        # for pr in product_variation:
-                        #     if pr in ex_var_list:
-                        #         index = ex_var_list.index(pr)
+                        # print(ex_product_list, id)
+                        # for pr in products:
+                        #     if pr in existing_product:
+                        #         index = existing_product.index(pr)
                         #         item_id = id[index]
                         #         item = CartItem.objects.get(id=item_id)
+                        #         item.quantity += 1
                         #         item.user = user
                         #         item.save()
                         #     else:
-                                # cart_item = CartItem.objects.filter(cart=cart)
+                        #         cart_item = CartItem.objects.filter(cart=cart)
+                        #         for item in cart_item:
+                        #             item.user = user
+                        #             item.save()
+
                         for item in cart_item:
                             item.user = user
                             item.save()
-
-                # request.session['id'] = user.pk
                 login(request, user)
-                messages.success(request, "Logged in Succesfully")
+                # messages.success(request, "Logged in Succesfully")
                 url = request.META.get('HTTP_REFERER')
                 try:
                     query = requests.utils.urlparse(url).query
@@ -154,10 +157,6 @@ def signin(request):
                         return redirect(nextPage)
                 except:
                     return redirect('index')
-
-            # except:
-            #     print("hai000")
-            #     pass
         else:
             messages.error(request, "Invalid login credentials")
 
@@ -167,8 +166,6 @@ def signin(request):
 
 @login_required(login_url='signin')
 def signout(request):
-    if 'id' in request.session:
-        request.session.flush()
     logout(request)
     messages.success(request, "Logged out Succesfully")
     return redirect('signin')
@@ -196,7 +193,7 @@ def my_order(request):
 @login_required(login_url='signin')
 def order_detail(request, order_id):
     print(order_id)
-    order = Order.objects.get(user=request.user, order_number=order_id)
+    order = Order.objects.get(order_number=order_id)
     ordered_products = OrderProduct.objects.filter(order=order)
     total_amount = 0
     for item in ordered_products:

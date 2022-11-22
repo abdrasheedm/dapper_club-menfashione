@@ -172,9 +172,9 @@
                         <div class="col-md-3 col-sm-6">
                             <div class="product-grid">
                                 <div class="product-image">
-                                    <a href="{{ product.product.get_url }}" class="image">
-                                        <img class="" src="{{ product.product.image1.url }}" width="200" height="200">
-                                        <!-- <img class="{{ product.get_url }}" src="{{ product.images2.url }}" width="200" height="200"> -->
+                                    <a href="{{ product.get_url }}" class="image">
+                                        <img class="img-1" src="{{ product.image1.url }}" width="200" height="200">
+                                        <img class="img-2" src="{{ product.image2.url }}" width="200" height="200">
                                     </a>
                                     <ul class="product-links">
                                         <li><div id="addtowishlist" prod-id="{{ product.id }}"><i class="fa fa-heart"></i></div></li>
@@ -184,14 +184,24 @@
                                     <a href="#" class="product-view"><i class="fa fa-search"></i></a>
                                 </div>
                                 <div class="product-content">
-                                    <ul class="rating">
-                                        <li class="fas fa-star"></li>
-                                        <li class="fas fa-star"></li>
-                                        <li class="fas fa-star"></li>
-                                        <li class="fas fa-star"></li>
-                                        <li class="fas fa-star disable"></li>
-                                        <li class="disable">(1 reviews)</li>
-                                    </ul>
+                                    <header class="section-heading">
+                                        <div class="rating-star d-flex justify-content-center">
+                                            <span>
+                                                <i class="fa fa-star{% if product.averageReview < 0.5 %} disable {% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}"
+                                                    aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.averageReview < 1.5 %} disable {% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}"
+                                                    aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.averageReview < 2.5 %} disable {% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}"
+                                                    aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.averageReview < 3.5 %} disable {% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}"
+                                                    aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.averageReview < 4.5 %} disable {% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}"
+                                                    aria-hidden="true"></i>
+                                                <span class="mx-3">{{product.countReview}} reviews</span>
+                                            </span>
+                                        </div>
+                    
+                                    </header>
                                     <h3 class="title"><a href="{{ product.product.get_url }}">{{ product.product.product_name }}</a></h3>
                                     <div class="price">₹ {{ product.product.price}}</div>
                                 </div>

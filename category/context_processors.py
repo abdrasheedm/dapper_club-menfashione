@@ -1,29 +1,32 @@
 from .models import Category, Brand, Size, Color, PriceFilter
-from carts.models import CartItem
+from carts.models import CartItem, WishlistItem, Cart
 from store.models import Product, ProductAttribute
 
-# def menu_links(request):
-#     links = Category.objects.all()
-#     return dict(links = links)
 
-# def brand_links(request):
-#     links = Brand.objects.all()
-#     return dict(brand_links = links)
 
 def get_filters(request):
-    # cats = Product.objects.distinct().values('sub_category__category__category_name', 'sub_category__category__id')
+    if not request.session.session_key:
+            request.session.create()
     cats = Category.objects.all()
     brands = Brand.objects.all()
     colors = Color.objects.all()
     sizes = Size.objects.all()
     prices = PriceFilter.objects.all()
-    # colors = ProductAttribute.objects.distinct().values('color__name', 'color__id', 'color__color_code')
-    # sizes = ProductAttribute.objects.distinct().values('size__size', 'size__id')
     prods = Product.objects.all()
+    cart_count = 0
+    wished_count = 0
     if request.user.is_authenticated:
         cart_items = CartItem.objects.filter(user=request.user)
+        cart_count = cart_items.count()
+        wished_items = WishlistItem.objects.filter(user= request.user)
+        wished_count = wished_items.count()
+
     else:
-        cart_items = CartItem.objects.filter(cart=request.session.session_key)
+        if Cart.objects.filter(cart_id=request.session.session_key):
+            cart = Cart.objects.get(cart_id=request.session.session_key)
+            cart_items = CartItem.objects.filter(cart=cart)
+            cart_count = cart_items.count()
+        wished_count = 0
 
     data = {
         'cats':cats,
@@ -32,6 +35,7 @@ def get_filters(request):
         'sizes':sizes,
         'prods':prods,
         'prices':prices,
-        'cart_items':cart_items,
+        'cart_count':cart_count,
+        'wished_count':wished_count,
     }
     return data
