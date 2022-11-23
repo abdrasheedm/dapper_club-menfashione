@@ -1,6 +1,7 @@
 from django import forms
 from store.models import Product, ProductAttribute
 from category.models import Category, SubCategory, Color, Size, PriceFilter, Brand
+from home.models import Banner
 
 class ProductForm(forms.ModelForm):
 
@@ -68,6 +69,59 @@ class BrandForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(BrandForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+class ColorForm(forms.ModelForm):
+
+    class Meta:
+        model = Color
+        fields = ['name', 'color_code']
+
+    def __init__(self, *args, **kwargs):
+        super(ColorForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+
+class SizeForm(forms.ModelForm):
+
+    class Meta:
+        model = Size
+        fields = ['size']
+
+    def __init__(self, *args, **kwargs):
+        super(SizeForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+class PriceFilterForm(forms.ModelForm):
+
+    class Meta:
+        model = PriceFilter
+        fields = ['price']
+
+    def __init__(self, *args, **kwargs):
+        super(PriceFilterForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+    
+class BannerForm(forms.ModelForm):
+
+    class Meta:
+        model = Banner
+        fields = ['img', 'alt_text']
+
+    def __init__(self, *args, **kwargs):
+        super(BannerForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'

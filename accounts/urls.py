@@ -14,12 +14,13 @@ urlpatterns = [
     path('validate_otp/<phone_number>/<uid>/<verification_user>/', o.otp_activation , name='validate_otp'),
 
 
+    # user dashboard
     path('dashboard/', views.dashboard, name='dashboard'),
     path('my_order/', views.my_order, name='my_order'),
     path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
     path('my_profile/', views.my_profile, name='my_profile'),    
-    path('my_address/', views.my_address, name='my_address'),
-    path('my_coupon/', views.my_coupon, name='my_coupon'),
+    # path('my_address/', views.my_address, name='my_address'),
+    # path('my_coupon/', views.my_coupon, name='my_coupon'),
     path('change_password/', views.change_password, name='change_password'),
 
 

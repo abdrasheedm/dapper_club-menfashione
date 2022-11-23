@@ -135,10 +135,9 @@ def search(request):
 
 def product_by_color(request, color_slug):
     colors = get_object_or_404(Color, slug=color_slug)
-    print("color")
 
-    products = ProductAttribute.objects.filter(color = colors).order_by('-id')
-    print("pooi")
+    # products = ProductAttribute.objects.filter(color = colors).order_by('-id')
+    products = Product.objects.filter(productattribute__color=colors).distinct()
     products_count = products.count()
     context = {
         'products':products,
@@ -151,13 +150,12 @@ def product_by_size(request, size_slug):
     sizes = get_object_or_404(Size, slug=size_slug)
     print(sizes)
 
-    products = ProductAttribute.objects.filter(size = sizes)
-    print(products)
-    # products = Product.objects.filter(product_name = products.product_name)
+    # products = ProductAttribute.objects.filter(size = sizes)
+    products = Product.objects.filter(productattribute__size=sizes).distinct()
     
     products_count = products.count()
     context = {
-        'products':products,
+        'products':products, 
         'products_count':products_count,
     }
     return render(request, 'store/product_by_size.html', context)

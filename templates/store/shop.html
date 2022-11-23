@@ -111,8 +111,8 @@
                                             <div class="shop__sidebar__color">
                                                 {% for color in colors %}
                                                 <a href="{{ color.get_url }}">
-                                                <label style="background:{{color.color_code}} ;" for="sp-1">
-                                                    <input type="radio" id="sp-1">
+                                                <label style="background:{{color.color_code}} ;" for="{{ color.get_url }}">
+                                                    <input type="radio" id="{{ color.get_url }}">
                                                 </label>
                                             </a>
 

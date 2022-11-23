@@ -212,7 +212,10 @@ def order_detail(request, order_id):
 
 @login_required(login_url='signin')
 def my_profile(request):
-    userprofile = get_object_or_404(UserProfile, user=request.user)
+    if UserProfile.objects.filter(user=request.user):
+        userprofile = get_object_or_404(UserProfile, user=request.user)
+    else:
+        userprofile = UserProfile.objects.create(user=request.user)
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)

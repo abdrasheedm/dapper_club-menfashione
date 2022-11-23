@@ -38,14 +38,43 @@ urlpatterns = [
     # Brand Management
 
     path('brand_management/',views.brand_management,name='brand_management'),
-    path('add_brand',views.add_brand,name='add_brand'),
-    # path('update_sub_category/<int:sub_cat_id>/',views.update_sub_category,name='update_sub_category'),
-    # path('delete_sub_category/<int:sub_cat_id>/',views.delete_sub_category,name='delete_sub_category'),
+    path('add_brand/',views.add_brand,name='add_brand'),
+    path('update_brand/<int:brand_id>/',views.update_brand,name='update_brand'),
+    path('delete_brand/<int:brand_id>/',views.delete_brand,name='delete_brand'),
 
+    # Color Management
 
+    path('color_management/',views.color_management,name='color_management'),
+    path('add_color/',views.add_color,name='add_color'),
+    path('update_color/<int:color_id>/',views.update_color,name='update_color'),
+    path('delete_color/<int:color_id>/',views.delete_color,name='delete_color'),
 
+    # Size Management
 
-
-
+    path('size_management/',views.size_management,name='size_management'),
+    path('add_size/',views.add_size,name='add_size'),
+    path('update_size/<int:size_id>/',views.update_size,name='update_size'),
+    path('delete_size/<int:size_id>/',views.delete_size,name='delete_size'),
     
+    # price_filter Management
+
+    path('price_filter_management/',views.price_filter_management,name='price_filter_management'),
+    path('add_price_filter/',views.add_price_filter,name='add_price_filter'),
+    path('update_price_filter/<int:price_filter_id>/',views.update_price_filter,name='update_price_filter'),
+    path('delete_price_filter/<int:price_filter_id>/',views.delete_price_filter,name='delete_price_filter'),
+
+    # banner Management
+
+    path('banner_management/',views.banner_management,name='banner_management'),
+    path('add_banner/',views.add_banner,name='add_banner'),
+    path('update_banner/<int:banner_id>/',views.update_banner,name='update_banner'),
+    path('delete_banner/<int:banner_id>/',views.delete_banner,name='delete_banner'),
+
+    # review Management
+
+    path('review_management/',views.review_management,name='review_management'),
+    # path('add_review/',views.add_review,name='add_review'),
+    path('review_block/<int:review_id>/',views.review_block,name='review_block'),
+    path('review_unblock/<int:review_id>/',views.review_unblock,name='review_unblock'),
+
 ]

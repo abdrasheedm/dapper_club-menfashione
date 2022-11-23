@@ -1,15 +1,16 @@
 from django.shortcuts import render,redirect
 from accounts.models import Account
-from store.models import Product, ProductAttribute
+from store.models import Product, ProductAttribute, ReviewRating
 from orders.models import Order
 from category.models import Category, SubCategory, Size, Color, PriceFilter, Brand
+from home.models import Banner
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password,check_password
 from django.contrib import messages
-from .forms import ProductForm, ProductAttributeForm, SubCategoryForm, CategoryForm, BrandForm
+from .forms import ProductForm, ProductAttributeForm, SubCategoryForm, CategoryForm, BrandForm, ColorForm, SizeForm, PriceFilterForm, BannerForm
 
 
 
@@ -191,6 +192,7 @@ def delete_sub_category(request, sub_cat_id):
   return redirect('sub_category_management')
 
 
+#brand management
 @never_cache
 @login_required(login_url='signin')
 def brand_management(request):
@@ -201,6 +203,7 @@ def brand_management(request):
   return render(request, 'manager/brand_management.html', context)
 
 
+#add brand
 @never_cache
 @login_required(login_url='signin')
 def add_brand(request):
@@ -210,6 +213,9 @@ def add_brand(request):
       form.save()
       return redirect('brand_management')
 
+    else:
+      print(form.errors)
+
   else:
     form = BrandForm()
 
@@ -217,6 +223,305 @@ def add_brand(request):
     'form': form
   }
   return render(request, 'manager/add_brand.html', context)
+
+
+# Update brand
+@never_cache
+@login_required(login_url='signin')
+def update_brand(request, brand_id):
+  brand = Brand.objects.get(id = brand_id)
+  form = BrandForm(instance = brand)
+  if request.method == 'POST':
+    form = BrandForm(request.POST, request.FILES, instance = brand)
+    if form.is_valid():
+      form.save()
+      return redirect('brand_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_brand.html', context)
+
+
+#delete brand
+@never_cache
+@login_required(login_url='signin')
+def delete_brand(request, brand_id):
+  brand = Brand.objects.get(id = brand_id)
+  brand.delete()
+  return redirect('brand_management')
+
+
+# Color management
+@never_cache
+@login_required(login_url='signin')
+def color_management(request):
+  colors = Color.objects.all().order_by('id')
+  context = {
+    'colors': colors
+  }
+  return render(request, 'manager/color_management.html', context)
+
+
+#add Color
+@never_cache
+@login_required(login_url='signin')
+def add_color(request):
+  if request.method == 'POST':
+    form = ColorForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('color_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = ColorForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_color.html', context)
+
+
+# Update color
+@never_cache
+@login_required(login_url='signin')
+def update_color(request, color_id):
+  color =  Color.objects.get(id = color_id)
+  form = ColorForm(instance = color)
+  if request.method == 'POST':
+    form = ColorForm(request.POST, instance = color)
+    if form.is_valid():
+      form.save()
+      return redirect('color_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_color.html', context)
+
+
+#delete color
+@never_cache
+@login_required(login_url='signin')
+def delete_color(request, color_id):
+  color = Color.objects.get(id = color_id)
+  color.delete()
+  return redirect('color_management')
+
+
+
+# Size management
+@never_cache
+@login_required(login_url='signin')
+def size_management(request):
+  sizes = Size.objects.all().order_by('id')
+  context = {
+    'sizes': sizes
+  }
+  return render(request, 'manager/size_management.html', context)
+
+
+#add size
+@never_cache
+@login_required(login_url='signin')
+def add_size(request):
+  if request.method == 'POST':
+    form = SizeForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('size_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = SizeForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_size.html', context)
+
+
+# Update size
+@never_cache
+@login_required(login_url='signin')
+def update_size(request, size_id):
+  size =  Size.objects.get(id = size_id)
+  form = SizeForm(instance = size)
+  if request.method == 'POST':
+    form = SizeForm(request.POST, instance = size)
+    if form.is_valid():
+      form.save()
+      return redirect('size_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_size.html', context)
+
+
+#delete size
+@never_cache
+@login_required(login_url='signin')
+def delete_size(request,size_id):
+  print('hai')
+  size = Size.objects.get(id = size_id)
+  size.delete()
+  return redirect('size_management')
+
+
+
+
+# Price-filter management
+@never_cache
+@login_required(login_url='signin')
+def price_filter_management(request):
+  prices = PriceFilter.objects.all().order_by('id')
+  context = {
+    'prices': prices
+  }
+  return render(request, 'manager/price_filter_management.html', context)
+
+
+#add Price-filter
+@never_cache
+@login_required(login_url='signin')
+def add_price_filter(request):
+  if request.method == 'POST':
+    form = PriceFilterForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('price_filter_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = PriceFilterForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_price_filter.html', context)
+
+
+# Update Price-filter
+@never_cache
+@login_required(login_url='signin')
+def update_price_filter(request, price_filter_id):
+  price_filter =  PriceFilter.objects.get(id = price_filter_id)
+  form = PriceFilterForm(instance = price_filter)
+  if request.method == 'POST':
+    form = PriceFilterForm(request.POST, instance = price_filter)
+    if form.is_valid():
+      form.save()
+      return redirect('price_filter_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_price_filter.html', context)
+
+
+#delete Price-filter
+@never_cache
+@login_required(login_url='signin')
+def delete_price_filter(request, price_filter_id):
+  print('hai')
+  price_filter = PriceFilter.objects.get(id = price_filter_id)
+  price_filter.delete()
+  return redirect('price_filter_management')
+
+
+
+# banner management
+@never_cache
+@login_required(login_url='signin')
+def banner_management(request):
+  banners = Banner.objects.all().order_by('id')
+  context = {
+    'banners': banners
+  }
+  return render(request, 'manager/banner_management.html', context)
+
+
+#add banner
+@never_cache
+@login_required(login_url='signin')
+def add_banner(request):
+  if request.method == 'POST':
+    form = BannerForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      return redirect('banner_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = BannerForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_banner.html', context)
+
+
+# Update banner
+@never_cache
+@login_required(login_url='signin')
+def update_banner(request, banner_id):
+  banner =  Banner.objects.get(id = banner_id)
+  form = BannerForm(instance = banner)
+  if request.method == 'POST':
+    form = BannerForm(request.POST, request.FILES, instance = banner)
+    if form.is_valid():
+      form.save()
+      return redirect('banner_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_banner.html', context)
+
+
+#delete Banner
+@never_cache
+@login_required(login_url='signin')
+def delete_banner(request, banner_id):
+  banner = Banner.objects.get(id = banner_id)
+  banner.delete()
+  return redirect('banner_management')
+
+
+# Review management
+@never_cache
+@login_required(login_url='signin')
+def review_management(request):
+  reviews = ReviewRating.objects.all()
+  context = {
+    'reviews': reviews
+  }
+  return render(request, 'manager/review_management.html', context)
+
+
+#block review
+@never_cache
+@login_required(login_url='signin')
+def review_block(request, review_id):
+  review = ReviewRating.objects.get(id=review_id)
+  review.status = False
+  review.save()
+  return redirect('review_management')
+
+# unblock review
+@never_cache
+@login_required(login_url='signin')
+def review_unblock(request, review_id):
+  review = ReviewRating.objects.get(id=review_id)
+  review.status= True
+  review.save()
+  return redirect('review_management')
+
 
 
 #Manage product
@@ -255,6 +560,9 @@ def add_product(request):
     }
     return render(request, 'manager/add_product.html', context)
 
+
+
+    
 # Edit Product
 @never_cache
 @login_required(login_url='signin')

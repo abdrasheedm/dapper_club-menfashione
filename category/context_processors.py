@@ -10,7 +10,7 @@ def get_filters(request):
     cats = Category.objects.all()
     brands = Brand.objects.all()
     colors = Color.objects.all()
-    sizes = Size.objects.all()
+    sizes = Size.objects.all().order_by('id')
     prices = PriceFilter.objects.all()
     prods = Product.objects.all()
     cart_count = 0
