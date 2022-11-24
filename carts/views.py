@@ -20,7 +20,7 @@ def add_to_cart(request):
     current_user=request.user
     product = ProductAttribute.objects.get(id__exact=request.GET['id'])
     try:
-        cart = Cart.objects.get(cart_id = request.session.session_key) # get the cart using the cart_id present in the session
+        cart = Cart.objects.get(cart_id = request.session.session_key)
     except Cart.DoesNotExist:
         cart = Cart.objects.create(cart_id = request.session.session_key)
         cart.save()

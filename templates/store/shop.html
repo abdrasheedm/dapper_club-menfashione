@@ -39,7 +39,25 @@
 
                                                     {% for category in cats %}
                                 
-                                                    <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
+                                                    <li>
+                                                        <!-- <div class="card-heading">
+                                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                                    </div> -->
+                                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <div class="shop__sidebar__categories">
+                                                                <ul class="nice-scroll">
+                
+                                                                    
+                                                
+                                                                    <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
+                                                                 
+                
+                                                                    
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div></li>
                                                     {% endfor %}
 
                                                     
