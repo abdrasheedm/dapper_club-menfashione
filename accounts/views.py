@@ -25,8 +25,10 @@ from .otp_verification import *
 
 # Create your views here.
 
+# new user registration
 def register(request):
 
+    # returning to home page if user is already signed
     if request.user.is_authenticated:
         return redirect('index')
 
@@ -44,8 +46,7 @@ def register(request):
             user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, phone_number=phone_number, password=password)
             user.save()
 
-            # user activation
-            # verification_user = sent_otp(phone_number, user)
+            # user activation using email
             current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
             messaage = render_to_string('accounts/account_verification_email.html',{
@@ -53,9 +54,6 @@ def register(request):
                 'domain' : current_site,
                 'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
                 'token' : default_token_generator.make_token(user),
-                # 'phone_number' : phone_number,
-                # 'uid' : user.pk,
-                # 'verification_user' : verification_user,
             })
             to_mail = email
             send_male = EmailMessage(mail_subject, messaage, to=[to_mail])
@@ -68,7 +66,7 @@ def register(request):
     return render(request, 'accounts/register.html', context) 
 
 
-
+# user activation email verification
 def activate_email(request,uidb64, token):
 
     try:
@@ -92,9 +90,10 @@ def activate_email(request,uidb64, token):
         return redirect('register')
 
 
-
+# user signin
 def signin(request):
 
+    # returning to home page if user is already signed
     if request.user.is_authenticated:
         return redirect('index')
 
@@ -105,49 +104,47 @@ def signin(request):
 
         user = authenticate(request, email=email, password = password )
         if user is not None:
-                print("hai")
+                # checking if there have any products in cart adding to user
                 if Cart.objects.filter(cart_id=request.session.session_key):
                     cart = Cart.objects.get(cart_id = request.session.session_key)
-                    print("hai2")
                     is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
-                    print("hai3")
+                    # checking if there have same product for user in cart
                     if is_cart_item_exists:
-                        print("hai4")
                         cart_item = CartItem.objects.filter(cart=cart)
-                        print("hai5")
-                        # products = []
-                        # for item in cart_item:
-                        #     product = item.product
-                        #     products.append(product)
-                        # print(products)
-                        # cart_item = CartItem.objects.filter(user=user)
-                        # ex_product_list = []
-                        # id = []
-                        # for item in cart_item:
-                        #     existing_product = item.product
-                        #     ex_product_list.append(existing_product)
-                        #     id.append(item.id)
-
-                        # print(ex_product_list, id)
-                        # for pr in products:
-                        #     if pr in existing_product:
-                        #         index = existing_product.index(pr)
-                        #         item_id = id[index]
-                        #         item = CartItem.objects.get(id=item_id)
-                        #         item.quantity += 1
-                        #         item.user = user
-                        #         item.save()
-                        #     else:
-                        #         cart_item = CartItem.objects.filter(cart=cart)
-                        #         for item in cart_item:
-                        #             item.user = user
-                        #             item.save()
-
+                        products = []
+                        qty = []
                         for item in cart_item:
-                            item.user = user
-                            item.save()
+                            product = item.product
+                            products.append(product)
+                            qty.append(item.quantity)
+                        cart_item = CartItem.objects.filter(user=user)
+                        ex_product_list = []
+                        id = []
+                        for item in cart_item:
+                            existing_product = item.product
+                            ex_product_list.append(existing_product)
+                            id.append(item.id)
+                        # if there have same product in user cart, updating it's quantity
+                        for pr in products:
+                            index = products.index(pr)
+                            item_qty = qty[index]
+                            if pr in ex_product_list:
+                                print(pr)
+                                index = ex_product_list.index(pr)
+                                item_id = id[index]
+                                item = CartItem.objects.get(id=item_id)
+                                item.quantity = item_qty
+                                item.user = user
+                                item.save()
+                            # if there is no same product in user's cart adding it
+                            else:
+                                cart_item = CartItem.objects.filter(cart=cart)
+                                for item in cart_item:
+                                    item.user = user
+                                    item.save()
+                # user login
                 login(request, user)
-                # messages.success(request, "Logged in Succesfully")
+                # redirecting user to the same page after login if user trying to login from another pages
                 url = request.META.get('HTTP_REFERER')
                 try:
                     query = requests.utils.urlparse(url).query
@@ -164,6 +161,7 @@ def signin(request):
     context = {'form':form}
     return render(request, 'accounts/signin.html', context)
 
+# user sign out
 @login_required(login_url='signin')
 def signout(request):
     logout(request)
@@ -171,6 +169,7 @@ def signout(request):
     return redirect('signin')
 
 
+# user dashboard
 @login_required(login_url='signin')
 def dashboard(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True)
@@ -181,6 +180,8 @@ def dashboard(request):
     }
     return render(request, 'accounts/user_dashboard/dashboard.html', context)
 
+
+#user orders
 @login_required(login_url='signin')
 def my_order(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-id')
@@ -190,6 +191,8 @@ def my_order(request):
     return render(request, 'accounts/user_dashboard/my_orders.html', context) 
 
 
+
+# user order details
 @login_required(login_url='signin')
 def order_detail(request, order_id):
     print(order_id)
@@ -210,6 +213,7 @@ def order_detail(request, order_id):
     return render(request, 'orders/order_detail.html', context)
 
 
+# user profile details
 @login_required(login_url='signin')
 def my_profile(request):
     if UserProfile.objects.filter(user=request.user):
@@ -235,13 +239,7 @@ def my_profile(request):
     return render(request, 'accounts/user_dashboard/my_profile.html', context)
 
 
-def my_address(request):
-    return render(request, 'accounts/user_dashboard/my_address.html')
-
-def my_coupon(request):
-    return render(request, 'accounts/user_dashboard/my_coupon.html')
-
-
+# user change password
 @login_required(login_url='signin')
 def change_password(request):
     if request.method == 'POST':

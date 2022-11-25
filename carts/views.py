@@ -27,86 +27,31 @@ def add_to_cart(request):
     if current_user.is_authenticated:
         is_cart_item_exists = CartItem.objects.filter(product=product, user=current_user).exists()
         if is_cart_item_exists:
-            cart_item = CartItem.objects.filter(product=product, user=current_user)
-            cart_item.quantity = request.GET['qty']
-            cart_item.save()
-            # messages.success(request, 'Item added to cart.')
-            
+            cart_item = CartItem.objects.filter(product=product, user=current_user).update(quantity=request.GET['qty'])
+            return JsonResponse({'status':"Cart updated"})
 
-            
         else:
             cart_item = CartItem.objects.create(
                     product = product,
                     quantity = request.GET['qty'],
                     user = current_user,
                 )
-            # messages.success(request, 'Item added to cart.')
-            
+            return JsonResponse({'status':"Item added to cart"})
+
     else:
         is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
         if is_cart_item_exists:
-            cart_item = CartItem.objects.filter(product=product, cart=cart)
-            cart_item.quantity = request.GET['qty']
-            cart_item.save()
-            messages.success(request, 'Item added to cart.')
 
-                # existing_variations -> database
-                # current variation -> product_variation
-                # item_id -> database
+            CartItem.objects.filter(product=product, cart=cart).update(quantity=request.GET['qty'])
+            return JsonResponse({'status':"Cart updated"})
+
         else:
             cart_item = CartItem.objects.create(
                     product = product,
                     quantity = request.GET['qty'],
                     cart = cart,
                 )
-            # messages.success(request, 'Item added to cart.')
-            
-    # return redirect('cart')
-    # if 'cartdata' in request.session:
-    #         cart = Cart.objects.get(cart_id = request.session.session_key)
-    #         if str(request.GET['id']) in request.session['cartdata']:
-    #             cart_data=request.session['cartdata']
-    #             cart_data[str(request.GET['id'])]['qty']=int(cart_prod[str(request.GET['id'])]['qty'])
-    #             cart_data.update(cart_data)
-    #             request.session['cartdata']=cart_data
-    #             print("if done")
-    #         else:
-
-    #             cart_data=request.session['cartdata']
-    #             print(cart_data)
-    #             cart_data.update(cart_prod)
-    #             request.session['cartdata']=cart_data
-    #             CartItem.objects.create(user=request.user, product=ProductAttribute.objects.get(id=request.GET['id']), cart=cart, quantity= request.GET['qty'])
-    #             print("else done")
-
-
-    # else:
-    #     request.session['cartdata']=cart_prod
-    #     print("hai")
-    #     # cart = request.session.session_key
-    #     # print(cart)
-    #     print(request.session.session_key)
-
-    #     cart = Cart.objects.create(
-    #         cart_id=request.session.session_key
-    #     )
-    
-    #     print(request.session.session_key)
-    #     if request.user.is_authenticated:
-    #         CartItem.objects.create(user=request.user ,product=ProductAttribute.objects.get(id=request.GET['id']), cart=cart, quantity= request.GET['qty'])
-
-    #     else:
-    #         CartItem.objects.create(product=ProductAttribute.objects.get(id=request.GET['id']), cart=cart, quantity= request.GET['qty'])
-
-
-
-        # cart_item = CartItem()
-        # cart_item.user = request.user
-        # cart_item.product = ProductAttribute.objects.get(id=request.GET['id'])
-        # cart_item.cart = cart
-        # cart_item.quantity = request.GET['qty']
-        # print("done")
-    return JsonResponse({'single_product':'success'})
+            return JsonResponse({'status':"Item added to cart"})
 
 
 def cart(request):
@@ -145,30 +90,7 @@ def cart(request):
     except:
         print("hao")
         pass #just ignore
-    # if 'cartdata' in request.session:
-    #     print('hai')
-    #     cart = Cart.objects.get(cart_id=request.session.session_key)
-    #     cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-    #     total_amount = 0
-    #     for cart_item in cart_items:
-    #     # for p_id,item in request.session['cartdata'].items():
-
-    #         # total_amount += int(item['qty'])*float(item['price'])
-    #         total_amount += (cart_item.product.product.price * cart_item.quantity)
-
-
-    #     tax = round((18 * float(total_amount))/100)
-    #     sub_total = total_amount - tax
-    #     context = {
-    #         'total_amount':total_amount,
-    #         'tax':tax,
-    #         'sub_total':sub_total,
-    #         'cart_items':cart_items,
-    #         # 'single_product':request.session['cartdata']
-    #     }
-    #     # request.session['total_price'] = total_amount
-    #     print(total_amount)
-    print("ha cart1111111111111111111")
+    
     return render(request, 'store/cart.html', context)
 
 # delete cart item
@@ -204,15 +126,11 @@ def cart_update(request):
 
     if current_user.is_authenticated:
         cart_items = CartItem.objects.filter(user=current_user, is_active=True)
-        print("ha1")
 
     else:
-        print("ha2")
         cart = Cart.objects.get(cart_id=request.session.session_key)
-        print("ha5")
 
         cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-        print("ha4")
 
     total_amount = 0
     for cart_item in cart_items:
@@ -227,30 +145,9 @@ def cart_update(request):
             'tax':tax,
             'sub_total':sub_total,
             'cart_items':cart_items,
-            # 'single_product':request.session['cartdata']
         }
-
-    # return redirect('cart')
-
-    # if 'cartdata' in request.session:
-    #     if p_id in request.session['cartdata']:
-    #         cart_data = request.session['cartdata']
-    #         cart_data[str(request.GET['id'])]['qty'] = p_qty
-    #         request.session['cartdata']=cart_data
-
-    # total_amount = 0
-    # for p_id, item in request.session['cartdata'].items():
-    #     total_amount += int(item['qty'])*float(item['price'])
-    # tax = (18 * float(total_amount))/100
-    # sub_total = total_amount - tax
-    # context = {
-    #     'total_amount':total_amount,
-    #     'tax':tax,
-    #     'sub_total':sub_total,
-    #     'single_product':request.session['cartdata']
-    # }
     t = render_to_string('store/ajax/cart-list.html', context)
-    return JsonResponse({'data':t})
+    return JsonResponse({'data':t, 'status':'cart updated successfully'})
 
 @login_required(login_url='signin')
 def add_to_wishlist(request):
@@ -266,14 +163,16 @@ def add_to_wishlist(request):
             product=product,
             is_active=True,
         )
-        messages.success(request, 'Item added to wishlist.')
+        message = 'Item added to wishlist'
+        status = 'success'
     
     else:
         print("no")
 
-        messages.success(request, 'Item already in wishlist.')
+        message = 'Item already in wishlist'
+        status = 'fail'
     
-    return JsonResponse({'single_product':'success'})
+    return JsonResponse({'message':message, 'status': status})
 
 
 @login_required(login_url='signin')

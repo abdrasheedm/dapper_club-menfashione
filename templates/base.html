@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{% static 'css/cards.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/custom.css'%}" type="text/css">
     <!-- Font Awesome -->
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" /> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- MDB -->
@@ -46,8 +46,14 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links">
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">{{user.first_name}}</a>
+                <a href="{% url 'signout' %}">Sign out</a>
+                {% else %}
                 <a href="{% url 'signin' %}">Sign in</a>
                 <a href="{% url 'register' %}">Register</a>
+
+                {% endif %}
                 <a href="#">FAQs</a>
             </div>
             <div class="offcanvas__top__hover">
@@ -61,9 +67,10 @@
         </div>
         <div class="offcanvas__nav__option">
             <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
-            <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
-            <a href="#"><img src="{% static 'img/icon/cart.png' %}" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
+            <a href="{% url 'wishlist' %}" class="text-dark"><img src="{% static 'img/icon/heart.png' %}"
+                alt="">({{wished_count}})</a>
+        <a href="{% url 'cart' %}" class="text-dark"><img src="{% static 'img/icon/cart.png' %}" alt="">
+            ({{cart_count}})<span>0</span></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -110,16 +117,13 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-3 mt-4">
+                <div class="col-lg-3 col-md-3 col-9 mt-4 ">
                     <div class="shop__sidebar__search">
                         <form action="{% url 'search' %}">
                             <input type="text" name="q" placeholder="Search...">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
                     </div>
-                    <!-- <div class="header__logo">
-                        <a href="./index.html"><img src="{% static 'img/logo1.png' %}" alt=""></a>
-                    </div> -->
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
@@ -261,7 +265,8 @@
     {% block script %}
 
     {% endblock %}
-    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
     <script src="{% static 'js/jquery.slicknav.js' %}"></script>
     <script src="{% static 'js/mixitup.min.js' %}"></script>

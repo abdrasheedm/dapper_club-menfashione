@@ -12,6 +12,7 @@ urlpatterns = [
     path('color/<slug:color_slug>/', views.product_by_color, name='product_by_color'),
     path('size/<slug:size_slug>/', views.product_by_size, name='product_by_size'),
     path('price/<slug:price_id>/', views.products_by_price, name='products_by_price'),
+    path('price_hightolow/', views.price_hightolow, name='price_hightolow'),
 
     path('<slug:sub_category_slug>/<slug:product_slug>/', views.product_detail, name='product_detail'),
     path('checkout/', views.checkout, name='checkout'),

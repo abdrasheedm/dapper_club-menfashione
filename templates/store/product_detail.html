@@ -12,8 +12,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="product__details__breadcrumb">
-                        <a href="./index.html">Home</a>
-                        <a href="./shop.html">Shop</a>
+                        <a href="{% url 'index' %}">Home</a>
+                        <a href="{% url 'store' %}">Shop</a>
                         <span>Product Details</span>
                     </div>
                 </div>
@@ -169,8 +169,8 @@
                         </div>
                         <div class="product__details__btns__option">
                             {% if not in_wishlist %} 
-                            <a href="{{ product.get_url }}" class="m-2 text-warning" id="addtowishlist" prod-id="{{ product.id }}"><i
-                                    class="fa fa-heart "></i> add to wishlist</a>
+                            <p class="m-2 text-warning" id="addtowishlist" prod-id="{{ product.id }}"><i
+                                    class="fa fa-heart "></i> add to wishlist</p>
                             {% else %}
                             <div class="m-2 text-warning"><i class="fa fa-heart "></i> In wishlist </div>
                             {% endif %}

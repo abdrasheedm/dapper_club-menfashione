@@ -39,7 +39,7 @@
                         <td class="cart__price">{{ cart_item.product.color}}</td>
                         <td class="cart__price">{{ cart_item.product.size}}</td>
                         <td class="cart__price">{% widthratio cart_item.product.product.price 1 cart_item.quantity %}</td>
-                        <td class="cart__close update-item" data-item="{{ cart_item.product.id }}"><i class="fa fa-sync"></i></td>
+                        <td class="cart__close update-item" data-item="{{ cart_item.product.id }}"><i class="fa fa-cart-plus" aria-hidden="true"></i></td>
                         <td class="cart__close" data-item="{{ cart_item.product.id }}"><a href="{% url 'cart_delete' cart_item.product.id %}"><i class="fa fa-close"></i></a></td>
                     </tr>
                     {% endfor %}

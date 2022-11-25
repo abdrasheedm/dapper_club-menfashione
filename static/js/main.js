@@ -218,38 +218,20 @@
         // var product_id = $(".prod_id").val();
         var product_id = $(".prod-id").attr('prod-id');
         var product_qty = $("#qty-input").val();
-        var product_prc = $(".prod_price").text();
-        var product_name = $(".prod_name").text();
-        var product_clr = $(".color-title").attr('color'); 
-        var product_size = $(".prod-id").text();
-        var product_image = $(".prod_img").val();
-
-
-        console.log(product_id+'prod id')
-        console.log(product_clr+' clr')
-        console.log(product_size+' sz')
-
-
-        console.log(product_qty, product_prc, product_name)    
 
         //Ajax
         $.ajax({
             url: '/cart/add-to-cart',
             data:{
                 'id':product_id,
-                'name':product_name,
-                'image':product_image,
-                'qty' :product_qty,
-                'color' :product_clr,
-                'size' :product_size,
-                'price':product_prc,
+                'qty' :product_qty, 
             },
             dataType:'json',
             beforeSend:function() {
                 _vm.attr('disabled', true);
             },
             success:function(res){
-                console.log(res);
+                swal.fire("Congratulations !", res.status, "success")
                 _vm.attr('disabled', false);           
             }
 
@@ -309,6 +291,7 @@
                 _vm.attr('disabled', false);           
             },
             success:function(res){
+                swal.fire("Congratulations !", res.status, "success")  
                 $("#cartList").html(res.data);
             }
 
@@ -338,8 +321,15 @@
                 _vm.attr('disabled', true);
             },
             success:function(res){
+                console.log(res.status)
                 console.log(res);
-                _vm.attr('disabled', false);           
+                _vm.attr('disabled', false);
+                if(res.message == 'Item added to wishlist'){
+                swal.fire("Congratulations !", res.message, "success")
+                }
+                else{
+                    Swal.fire(res.message)
+                }
             }
 
         });

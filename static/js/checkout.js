@@ -34,7 +34,7 @@ $(document).ready(function () {
                     url: "/payment/order-payment",
                     data: data,
                     success: function (responsec) {
-                        swal("Congratulations !", responsec.status, "success").then((value) => {
+                        swal.fire("Congratulations !", responsec.status, "success").then((value) => {
                             window.location.href = '/payment/order-complete'+'?order_number='+order_number
                             console.log(order_number)
 
@@ -82,7 +82,7 @@ $(document).ready(function () {
             url: "/payment/order-payment",
             data: data,
             success: function (responsec) {
-                swal("Congratulations !", responsec.status, "success").then((value) => {
+                swal.fire("Congratulations !", responsec.status, "success").then((value) => {
                     window.location.href = '/payment/order-complete'+'?order_number='+order_number
                     console.log(order_number)
 

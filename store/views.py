@@ -1,4 +1,3 @@
-
 from django.shortcuts import get_object_or_404, render, redirect
 from store.models import Product, ProductAttribute, ReviewRating
 from accounts.models import UserProfile
@@ -15,7 +14,6 @@ def store(request, category_slug=None) :
     categories = None
     products = None
     print(category_slug)
-    in_wishlist = WishlistItem
 
     if category_slug != None:
 
@@ -38,7 +36,6 @@ def store(request, category_slug=None) :
     context = {
         'products': paged_products,
         'products_count':products_count,
-        # 'brands':brands,
 
     }
     return render(request, 'store/shop.html', context)
@@ -163,16 +160,7 @@ def product_by_size(request, size_slug):
 
 def products_by_price(request, price_id):
     price_filter = get_object_or_404(PriceFilter, id=price_id)
-    products = Product.objects.filter(price_filter=price_filter).order_by('-id')
-
-    # cart_item = CartItem.objects.filter(user=request.user)
-    print("hai5")
-    # products = []
-    # for item in cart_item:
-    # product = CartItem.objects.get(product)
-    # print(product)
-    # products.append(list(product))
-
+    products = Product.objects.filter(price_filter=price_filter).order_by('price')
     products_count = products.count()
     context = {
         'products':products,
@@ -180,6 +168,20 @@ def products_by_price(request, price_id):
     }
     return render(request, 'store/product_by_price.html', context)
 
+
+def price_hightolow(request):
+    products = Product.objects.all().order_by('price')
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+    products_count = products.count()
+
+    context = {
+        'products' : paged_products,
+        'products_count' : products_count
+    }
+    return render(request, 'store/shop.html', context)
+    
 
 
 @login_required(login_url='signin')

@@ -14,9 +14,11 @@
 
 		</header>
 		<div class="card-body">
+			{% if userprofile.profile_picture %}
 			<div class="text-right">
 				<img src="{{userprofile.profile_picture.url}}" alt="Profile Picture" width="100" style="border-radius:50px;">
 			</div>
+			{% endif %}
 			<div class="row">
 			<div class="col-md-12">
 				<form action="{% url 'my_profile' %}" method="POST" enctype="multipart/form-data">

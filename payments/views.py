@@ -19,7 +19,7 @@ def order_payment(request):
     if request.POST.get('payment_id'):
         payment.payment_id = request.POST.get('payment_id') 
     payment.payment_method = request.POST.get('payment_mode')
-    payment.amount_paid = request.POST.get('amount_paid')
+    payment.amount_paid = request.POST.get('amount_paid') 
     payment.status=True
     payment.save()
 
@@ -29,7 +29,7 @@ def order_payment(request):
     order = Order.objects.get(user=request.user, order_number=order_number)
     order.payment = payment
     order.is_ordered = True
-    order.status ='Pending'
+    order.status ='Pending' 
     order.save()
 
     cart_items = CartItem.objects.filter(user=request.user)
@@ -48,7 +48,7 @@ def order_payment(request):
         product.save()
     
     cart_items = CartItem.objects.filter(user=request.user)
-    cart_items.delete()
+    cart_items.delete() 
     return JsonResponse({'status':"Your order has been placed successfully "})
  
 

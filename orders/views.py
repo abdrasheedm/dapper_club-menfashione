@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from carts.models import CartItem
 from .models import Order
 from .forms import OrderForm
+from accounts.models import UserProfile
 import datetime
 
 # Create your views here.
@@ -26,7 +27,19 @@ def place_order(request):
         form = OrderForm(request.POST)
         print("hai")
         if form.is_valid():
-            print("hai")
+
+            #storing user address in user_profile table
+            if not UserProfile.objects.filter(user=request.user):
+                print("addin gaddress")
+                user_profile = UserProfile()
+                user_profile.user = request.user
+                user_profile.address_line_1 = form.cleaned_data['address_line_1']
+                user_profile.address_line_2 = form.cleaned_data['address_line_2']
+                user_profile.country = form.cleaned_data['country']
+                user_profile.state = form.cleaned_data['state']
+                user_profile.city = form.cleaned_data['city']
+                user_profile.save()
+
             # Store all the billing information inside Order table
             data = Order()
             data.user = current_user
@@ -40,7 +53,7 @@ def place_order(request):
             data.state = form.cleaned_data['state']
             data.city = form.cleaned_data['city']
             data.order_note = form.cleaned_data['order_note']
-            data.payment_method = form.cleaned_data['payment_method']
+            data.payment_method = form.cleaned_data['payment_method'] 
             data.order_total = total_amount
             data.tax = tax
             data.ip = request.META.get('REMOTE_ADDR')
@@ -50,7 +63,7 @@ def place_order(request):
             dt = int(datetime.date.today().strftime('%d'))
             mt = int(datetime.date.today().strftime('%m'))
             d = datetime.date(yr,mt,dt)
-            current_date = d.strftime("%Y%m%d") #20210305
+            current_date = d.strftime("%Y%m%d")
             order_number = current_date + str(data.id)
             data.order_number = order_number
             data.save()

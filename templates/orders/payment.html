@@ -37,7 +37,7 @@
 						<p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
 						<p class="card-text mb-0">{{order.country}}</p>
 						<p class="card-text mb-0 email" email="{{order.email}}">{{order.email}}</p>
-						<p class="card-text mb-0 phone" phone="{{order.phone}}">{{order.phone}}</p>
+						<p class="card-text mb-0 phone" phone="{{order.phone}}">{{order.phone}}</p> 
 						{% if order.order_note %}
 						<b>Order Note: </b> {{order.order_note}}
 						{% endif %}
@@ -122,7 +122,6 @@
 {% block script %}
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="{% static 'js/checkout.js' %}"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
     {% endblock %}
