@@ -20,10 +20,16 @@ class Payment(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('Pending', 'Pending'),
+        ('Processing', 'Processing'),
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled'),
+    )
+    REFUND_STATUS = (
+        ('None', 'None'),
+        ('Processing', 'Processing'),
+        ('Refunded', 'Refunded'),
+        ('Failed', 'Failed')
     )
 
     user = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
@@ -43,6 +49,7 @@ class Order(models.Model):
     tax = models.FloatField()
     payment_method = models.CharField(max_length=100, null=True)
     status = models.CharField(max_length=10, choices=STATUS, default='New')
+    refund_status = models.CharField(max_length=10, choices=REFUND_STATUS, default='None')
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

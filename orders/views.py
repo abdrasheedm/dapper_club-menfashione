@@ -3,8 +3,21 @@ from django.http import HttpResponse
 from carts.models import CartItem
 from .models import Order
 from .forms import OrderForm
+from django.conf import settings
 from accounts.models import UserProfile
 import datetime
+import razorpay
+
+
+
+# authorize razorpay client with API Keys.
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+
+
+
+
 
 # Create your views here.
 def place_order(request):
@@ -30,7 +43,6 @@ def place_order(request):
 
             #storing user address in user_profile table
             if not UserProfile.objects.filter(user=request.user):
-                print("addin gaddress")
                 user_profile = UserProfile()
                 user_profile.user = request.user
                 user_profile.address_line_1 = form.cleaned_data['address_line_1']
@@ -86,7 +98,24 @@ def place_order(request):
 
 def cancel_order(request, order_number):
     order = Order.objects.get(order_number=order_number)
+    # print(razorpay_client)
+    # print(order.payment_method)
+    # if order.payment_method == 'razorpay':
+    #     payment_id = order.payment.payment_id
+    #     print(payment_id)
+    #     razorpay_client.payment.refund(payment_id,{
+    #         "amount": "100",
+    #         "speed": "normal",
+    #         "notes": {
+    #             "notes_key_1": "Beam me up Scotty.",
+    #             "notes_key_2": "Engage"
+    #         },
+    #         "receipt": "Receipt No. 31"
+    #         })
+    #     order.refund_status = 'Processing'
+    #     print("hai")
     order.status = 'Cancelled'
     order.save()
+    print("sett")
 
     return redirect('my_order')
