@@ -11,6 +11,8 @@ urlpatterns = [
       path('delete-from-wishlist',views.delete_from_wishlist, name="delete_from_wishlist"),
       path('wishlist/',views.wishlist, name="wishlist"),
 
+      path('apply-coupon', views.apply_coupon, name="apply_coupon")
+
 
 
 

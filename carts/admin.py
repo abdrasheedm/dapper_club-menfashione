@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Cart, CartItem, WishlistItem
+from .models import  Cart, CartItem, WishlistItem, Coupon
 
 # Register your models here.
 
@@ -15,6 +15,9 @@ class WishlistItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'product','user', 'is_active')
     list_editable = ('is_active',)
 admin.site.register(WishlistItem, WishlistItemAdmin)
+
+admin.site.register(Coupon)
+
 
 
 

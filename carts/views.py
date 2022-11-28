@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http.response import JsonResponse
 from store.models import Product, ProductAttribute
-from .models import Cart, CartItem,WishlistItem
+from .models import Cart, CartItem,WishlistItem, Coupon
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -189,3 +189,8 @@ def delete_from_wishlist(request):
     wishlist_item = WishlistItem.objects.get(product=product)
     wishlist_item.delete()
     return JsonResponse({'status':'item removed'})
+
+
+def apply_coupon(request):
+    coupon_code = request.GET['coupon_code']
+    Coupon.objects.filter(coupon_code=coupon_code, is_expired = False)

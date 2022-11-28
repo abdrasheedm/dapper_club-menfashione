@@ -97,8 +97,34 @@ $(document).ready(function(){
 	// $(".color"+_color).first().addClass('active');
 	// $(".product-price").text(_price);
 
+	// apply coupon
+	$(document).on('click',"#apply_coupon",function() {
+        var _vm = $(this);
+        var coupon_code = $("[name='coupon_code']").val();
+		console.log(coupon_code)
 
-	// place order with razorpay
+        //Ajax
+        $.ajax({
+            url: '/cart/apply-coupon',
+            data:{
+                'coupon_code':coupon_code 
+            },
+            dataType:'json',
+            beforeSend:function() {
+                _vm.attr('disabled', true);
+            },
+            success:function(res){
+                _vm.attr('disabled', false);  
+                // swal.fire("Congratulations !", res.status, "success").then((value) => {
+                //     window.location.reload()
+                //   });
+            }
+
+        });
+        //end ajax
+
+    });
+
 
 
 });

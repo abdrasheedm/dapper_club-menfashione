@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import Account
 from store.models import Product, ProductAttribute
-from carts.models import Cart, CartItem
+from carts.models import Cart, CartItem,  Coupon
 
 # Create your models here.
 
@@ -50,6 +50,8 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=100, null=True)
     status = models.CharField(max_length=10, choices=STATUS, default='New')
     refund_status = models.CharField(max_length=10, choices=REFUND_STATUS, default='None')
+    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, blank=True, null=True)
+    coupon_discount = models.IntegerField(blank=True, null=True)
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -71,7 +73,6 @@ class OrderProduct(models.Model):
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     product = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
-    # variations = models.ManyToManyField(ProductAttribute, blank=True)
     quantity = models.IntegerField(default=1)
     product_price = models.FloatField()
     ordered = models.BooleanField(default=False)
@@ -79,4 +80,4 @@ class OrderProduct(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # def __str__(self):
-    #     return self.product.product
+    #     return self.product

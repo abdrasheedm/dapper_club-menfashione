@@ -29,7 +29,8 @@ def order_payment(request):
     print(payment)
     payment_id = request.POST.get('payment_id')
     amount_paid = 100
-    razorpay_client.payment.capture(payment_id, amount_paid)
+    if request.POST.get('payment_id'):
+        razorpay_client.payment.capture(payment_id, amount_paid)
     order_number = request.POST.get('order_number')
     order = Order.objects.get(user=request.user, order_number=order_number)
     order.payment = payment

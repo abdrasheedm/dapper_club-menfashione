@@ -26,3 +26,16 @@ class WishlistItem(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField(default=True)
+
+
+class Coupon(models.Model):
+    coupon_code = models.CharField(max_length=10)
+    is_expired = models.BooleanField(default=False)
+    discount_price = models.IntegerField(default=199)
+    minimum_amount = models.IntegerField(default=999)
+    created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modify_date = models.DateTimeField(auto_now=True)
+    expiry_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.coupon_code
