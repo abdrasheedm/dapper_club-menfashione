@@ -53,9 +53,9 @@
               <td>{{ variation.stock   }}</td>
               <td>
                 {% if variation.is_available %}
-                <i class="fas fa-check-circle" style="color: #28a745"></i>
+                <i class="fa fa-check-circle" style="color: #28a745"></i>
                 {% else %}
-                <i class="fas fa-times-circle" style="color: #c21010"></i>
+                <i class="fa fa-times-circle" style="color: #c21010"></i>
                 {% endif %}
               </td>
               <td><a href="{% url 'update_variation' variation.id %}" class="btn btn-sm btn-warning">Update</a></td>

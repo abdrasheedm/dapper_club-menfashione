@@ -92,22 +92,13 @@ def store_by_brand(request, brand_slug=None):
     products = None
     brands = None
 
-    if brand_slug != None:
-        print("hai")
-        brands = get_object_or_404(Brand, slug=brand_slug)
-        print("helllo")
+    print("hai")
+    brands = get_object_or_404(Brand, slug=brand_slug)
+    print("helllo")
 
-        products = Product.objects.filter(brand = brands).order_by('-id')
-        print("pooi")
-        products_count = products.count()
-
-
-    else:
-        print("else")
-
-        products = Product.objects.all()
-        products_count = products.count()
-
+    products = Product.objects.filter(brand = brands).order_by('-id')
+    print("pooi")
+    products_count = products.count()
 
     context = {
         'products': products,
@@ -133,21 +124,19 @@ def search(request):
 def product_by_color(request, color_slug):
     colors = get_object_or_404(Color, slug=color_slug)
 
-    # products = ProductAttribute.objects.filter(color = colors).order_by('-id')
     products = Product.objects.filter(productattribute__color=colors).distinct()
     products_count = products.count()
     context = {
         'products':products,
         'products_count':products_count,
     }
-    return render(request, 'store/product_by_color.html', context)
+    return render(request, 'store/shop.html', context)
 
 
 def product_by_size(request, size_slug):
     sizes = get_object_or_404(Size, slug=size_slug)
     print(sizes)
 
-    # products = ProductAttribute.objects.filter(size = sizes)
     products = Product.objects.filter(productattribute__size=sizes).distinct()
     
     products_count = products.count()
@@ -155,7 +144,7 @@ def product_by_size(request, size_slug):
         'products':products, 
         'products_count':products_count,
     }
-    return render(request, 'store/product_by_size.html', context)
+    return render(request, 'store/shop.html', context)
 
 
 def products_by_price(request, price_id):
@@ -166,7 +155,7 @@ def products_by_price(request, price_id):
         'products':products,
         'products_count':products_count,
     }
-    return render(request, 'store/product_by_price.html', context)
+    return render(request, 'store/shop.html', context)
 
 
 def price_hightolow(request):

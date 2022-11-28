@@ -8,6 +8,9 @@ from orders.models import Payment, Order, OrderProduct
 from carts.models import CartItem
 from store.models import ProductAttribute
 
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
 
 # authorize razorpay client with API Keys.
 razorpay_client = razorpay.Client(
@@ -50,7 +53,17 @@ def order_payment(request):
         product.save()
     
     cart_items = CartItem.objects.filter(user=request.user)
-    cart_items.delete() 
+    cart_items.delete()
+    # order confirmed email
+    mail_subject = 'Thank You for your order!'
+    messaage = render_to_string('orders/order_recieved_email.html',{
+        'user': request.user,
+        'order':order,
+
+    })
+    to_mail = request.user.email
+    send_male = EmailMessage(mail_subject, messaage, to=[to_mail])
+    send_male.send()
     return JsonResponse({'status':"Your order has been placed successfully "})
  
 
