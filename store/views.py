@@ -181,6 +181,20 @@ def price_hightolow(request):
         'products_count' : products_count
     }
     return render(request, 'store/shop.html', context)
+
+
+def price_lowtohigh(request):
+    products = Product.objects.all().order_by('-price')
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+    products_count = products.count()
+
+    context = {
+        'products' : paged_products,
+        'products_count' : products_count
+    }
+    return render(request, 'store/shop.html', context)
     
 
 

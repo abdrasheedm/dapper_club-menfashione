@@ -38,7 +38,8 @@
                                                 <li><a href="{% url 'store' %}">All Categories</a></li>
 
                                                 {% for category in cats %}
-                                                <li><a href="{{ category.get_url }}">{{ category.category_name }}</a></li>
+                                                <li><a href="{{ category.get_url }}">{{ category.category_name }}</a>
+                                                </li>
                                                 {% endfor %}
 
 
@@ -152,29 +153,15 @@
                                 <p>Showing 1–12 of {{products_count}} results</p>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 dropdown show">
-                            <div class="shop__product__option__right ">
-                            <p class=" dropdown-toggle text-dark" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Sort by
-                            </p>
-                          
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              <a class="dropdown-item" href="#">Action</a>
-                              <a class="dropdown-item" href="#">Another action</a>
-                              <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Dropdown link
+                        <div class="dropdown shop__product__option__right">
+                            <a class="dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Sort by :
                             </a>
                           
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              <a class="dropdown-item" href="#">Action</a>
-                              <a class="dropdown-item" href="#">Another action</a>
-                              <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="{% url 'price_hightolow' %}">Price low to high</a></li>
+                              <li><a class="dropdown-item" href="{% url 'price_lowtohigh' %}">Price high to low</a></li>
+                            </ul>
                           </div>
                         <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
@@ -197,8 +184,10 @@
                         <div class="product-grid">
                             <div class="product-image">
                                 <a href="{{ product.get_url }}" class="image">
-                                    <img class="img-1" src="{{ product.image1.url }}" width="200" height="200">
-                                    <img class="img-2" src="{{ product.image2.url }}" width="200" height="200">
+                                    <img class="img-1" src="{{ product.image1.url }}"
+                                        style="width: 300px; height: 350px; object-fit: cover;">
+                                    <img class="img-2" src="{{ product.image2.url }}"
+                                        style="width: 300px; height: 350px; object-fit: cover;">
                                 </a>
                                 <ul class="product-links">
                                     <li>
@@ -235,7 +224,8 @@
                                     <h3 class="title"><a href="{{ product.get_url }}">{{ product.product_name }}</a>
                                     </h3>
                                 </strong>
-                                <h6 class="title"><a class="price" href="{{ product.get_url }}">{{ product.brand.name}}</a></h6>
+                                <h6 class="title"><a class="price" href="{{ product.get_url }}">{{
+                                        product.brand.name}}</a></h6>
 
                                 <div class="price">₹ {{ product.price}}</div>
                             </div>

@@ -169,15 +169,14 @@
                         </div>
                         <div class="product__details__btns__option">
                             {% if not in_wishlist %} 
-                            <p class="m-2 text-warning" id="addtowishlist" prod-id="{{ product.id }}"><i
-                                    class="fa fa-heart "></i> add to wishlist</p>
+                            <p class="m-2 text-warning" id="addtowishlist" prod-id="{{ product.id }}"><i class="fa fa-heart "></i> add to wishlist</p>
                             {% else %}
-                            <div class="m-2 text-warning"><i class="fa fa-heart "></i> In wishlist </div>
+                            <div class="m-2 text-danger delete-wish" data-item="{{ product.id }}"><i class="fa fa-heart "></i> Remove from wishlist </div>
                             {% endif %}
 
                             <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
                         </div>
-                        <div class="product__details__last__option">
+                        <!-- <div class="product__details__last__option">
                             <h5><span>Guaranteed Safe Checkout</span></h5>
                             <img src="img/shop-details/details-payment.png" alt="">
                             <ul>
@@ -185,7 +184,7 @@
                                 <li><span>Categories:</span> Clothes</li>
                                 <li><span>Tag:</span> Clothes, Skin, Body</li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

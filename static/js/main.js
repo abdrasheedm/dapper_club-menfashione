@@ -231,8 +231,10 @@
                 _vm.attr('disabled', true);
             },
             success:function(res){
-                swal.fire("Congratulations !", res.status, "success")
-                _vm.attr('disabled', false);           
+                _vm.attr('disabled', false);  
+                swal.fire("Congratulations !", res.status, "success").then((value) => {
+                    window.location.reload()
+                  });
             }
 
         });
@@ -325,7 +327,9 @@
                 console.log(res);
                 _vm.attr('disabled', false);
                 if(res.message == 'Item added to wishlist'){
-                swal.fire("Congratulations !", res.message, "success")
+                swal.fire("Congratulations !", res.message, "success").then((value) => {
+                    window.location.reload()
+                  });
                 }
                 else{
                     Swal.fire(res.message)
@@ -344,6 +348,7 @@
         var _pId=$(this).attr('data-item');
         var _vm=$(this);
         //Ajax
+        console.log(_pId)
         $.ajax({
             url: '/cart/delete-from-wishlist',
             data:{
@@ -355,11 +360,8 @@
             },
             success:function(res){
                 console.log(res);
-                _vm.attr('disabled', false);           
-            },
-            success:function(res){
-                $("#cartList").html(res.data);
-                console.log(res.data)
+                _vm.attr('disabled', false);
+                window.location.reload();         
             }
 
         });

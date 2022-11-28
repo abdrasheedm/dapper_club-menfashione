@@ -188,4 +188,4 @@ def delete_from_wishlist(request):
     product = Product.objects.get(id=prod_id)
     wishlist_item = WishlistItem.objects.get(product=product)
     wishlist_item.delete()
-    return redirect('wishlist')
+    return JsonResponse({'status':'item removed'})

@@ -51,7 +51,7 @@ def manager_dashboard(request):
 def user_management(request):
     if request.method == "POST":
       key = request.POST['key']
-      users = Account.objects.filter(Q(first_name__startswith=key) | Q(last_name__startswith=key) | Q(username__startswith=key) | Q(email__startswith=key)).order_by('id')
+      users = Account.objects.filter( Q(first_name__startswith=key) | Q(last_name__startswith=key) | Q(username__startswith=key) | Q(email__startswith=key), is_superadmin = False).order_by('id')
     else:
         users = Account.objects.filter(is_superadmin=False).order_by('id')
 
@@ -735,7 +735,7 @@ def admin_order(request):
   current_user = request.user
   if request.method == 'POST':
     keyword = request.POST['keyword']
-    orders = Order.objects.filter(Q(user=current_user), Q(is_ordered=True), Q(order_number__contains=keyword) | Q(user__emai__icontains=keyword) | Q(first_name__startswith=keyword) | Q(last_name__startswith=keyword) | Q(phone__startswith=keyword)).order_by('-created_at')
+    orders = Order.objects.filter(Q(user=current_user), Q(is_ordered=True), Q(order_number__contains=keyword) | Q(user__email__icontains=keyword) | Q(first_name__startswith=keyword) | Q(last_name__startswith=keyword) | Q(phone__startswith=keyword)).order_by('-created_at')
     
   else:
     orders = Order.objects.filter(user=current_user, is_ordered=True).order_by('-created_at')
