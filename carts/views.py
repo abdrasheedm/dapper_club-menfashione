@@ -203,8 +203,6 @@ def apply_coupon(request):
             if coupon.filter(expiry_date__gte=timezone.now()):
                 if order.order_total > coupon[0].minimum_amount:
                     order.coupon = coupon[0]
-                    print(coupon[0])
-                    print(coupon[0].discount_price)
                     order.coupon_discount = coupon[0].discount_price
                     order.order_total -= coupon[0].discount_price
                     order.save()
@@ -212,9 +210,6 @@ def apply_coupon(request):
 
                     current_user = request.user
                     cart_items = CartItem.objects.filter(user=current_user)
-                    cart_count = cart_items.count()
-                    if cart_count <= 0:
-                        return redirect('store')
                     total_amount = 0
                     for cart_item in cart_items:
                         total_amount += (cart_item.product.product.price * cart_item.quantity)

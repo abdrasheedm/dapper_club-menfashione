@@ -66,7 +66,7 @@ def place_order(request):
             data.state = form.cleaned_data['state']
             data.city = form.cleaned_data['city']
             data.order_note = form.cleaned_data['order_note']
-            data.payment_method = form.cleaned_data['payment_method'] 
+            data.payment_method = form.cleaned_data['payment_method']  
             data.order_total = total_amount
             data.tax = tax
             data.ip = request.META.get('REMOTE_ADDR')
