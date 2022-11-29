@@ -71,7 +71,7 @@
                   <input type="text" name="city" value="{{ userprofile.city }}" class="form-control" required>
                 </div>
                 <div class="col form-group">
-                  <label for="">State</label> 
+                  <label for="">State</label>
                   <input type="text" name="state" value="{{ userprofile.state }}" class="form-control" required>
                 </div>
                 <div class="col form-group">
@@ -82,12 +82,13 @@
               </div>
               <div class="row mb-3">
                 <h4 class="card-title my-4">Select payment method:</h4>
-                <div class="col-6"><input type="radio" id="cash_on_delivery" name="payment_method" value="cash on delivery" required>
+                <div class="col-6"><input type="radio" id="cash_on_delivery" name="payment_method"
+                    value="cash on delivery" required>
                   <label for="cash_on_delivery">CASH ON DELIVERY</label>
                 </div>
-                <div class="col-6"> 
+                <div class="col-6">
                   <input type="radio" id="razorpay" name="payment_method" value="razorpay">
-                  <label for="razorpay">RAZORPAY</label> 
+                  <label for="razorpay">RAZORPAY</label>
                 </div>
               </div>
               <div class="form-row">
@@ -101,11 +102,6 @@
 
       </div>
       <div class="col-lg-5 card">
-        <div class="cart__discount">
-          <h6>Discount codes</h6>
-              <input type="text" placeholder="Coupon code" name="coupon_code">
-              <button type="button" id="apply_coupon">Apply</button>
-      </div>
         <div class="shopping__cart__table">
           {% if cart_items %}
           <table>

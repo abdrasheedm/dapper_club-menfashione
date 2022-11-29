@@ -30,7 +30,7 @@ class WishlistItem(models.Model):
 
 class Coupon(models.Model):
     coupon_code = models.CharField(max_length=10)
-    is_expired = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     discount_price = models.IntegerField(default=199)
     minimum_amount = models.IntegerField(default=999)
     created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
@@ -38,4 +38,4 @@ class Coupon(models.Model):
     expiry_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return self.coupon_code
+        return self.coupon_code 

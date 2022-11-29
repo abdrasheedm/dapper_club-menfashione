@@ -1,10 +1,13 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http.response import JsonResponse
 from store.models import Product, ProductAttribute
+from orders.models import Order
 from .models import Cart, CartItem,WishlistItem, Coupon
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+
 
 
 
@@ -193,4 +196,60 @@ def delete_from_wishlist(request):
 
 def apply_coupon(request):
     coupon_code = request.GET['coupon_code']
-    Coupon.objects.filter(coupon_code=coupon_code, is_expired = False)
+    if Coupon.objects.filter(coupon_code__exact=coupon_code, is_active=True).exists():
+        coupon = Coupon.objects.filter(coupon_code__exact=coupon_code, is_active=True)
+        order = Order.objects.get(order_number=request.GET['order_number'])
+        if not Order.objects.filter(user=request.user, coupon=coupon[0]):
+            if coupon.filter(expiry_date__gte=timezone.now()):
+                if order.order_total > coupon[0].minimum_amount:
+                    order.coupon = coupon[0]
+                    print(coupon[0])
+                    print(coupon[0].discount_price)
+                    order.coupon_discount = coupon[0].discount_price
+                    order.order_total -= coupon[0].discount_price
+                    order.save()
+                    messages ="Coupon applied successfully"
+
+                    current_user = request.user
+                    cart_items = CartItem.objects.filter(user=current_user)
+                    cart_count = cart_items.count()
+                    if cart_count <= 0:
+                        return redirect('store')
+                    total_amount = 0
+                    for cart_item in cart_items:
+                        total_amount += (cart_item.product.product.price * cart_item.quantity)
+
+                    tax = round((18 * float(total_amount))/100)
+                    sub_total = total_amount - tax
+                    coupon_discount = order.coupon_discount
+                    total_amount -= coupon_discount
+                    context = {
+                    'order': order,
+                    'cart_items': cart_items,
+                    'sub_total': sub_total,
+                    'tax': tax,
+                    'total_amount': total_amount,
+                    'payment_mode':order.payment_method,
+                    'coupon_discount':coupon_discount
+                }
+                    t = render_to_string('orders/ajax/payment_ajax.html', context)
+                    return JsonResponse({'data':t, 'msg':messages})
+
+                else:
+                    messages="You minimum amount of "+coupon.minimum_amount+" to avail this coupon!"
+                    return JsonResponse({'msg':messages})
+
+
+
+            else:
+                messages = "Coupon expired!"
+                return JsonResponse({'msg':messages})
+
+        else:
+            messages = "You already applied this Coupon!"
+            return JsonResponse({'msg':messages})
+
+
+    else:
+        messages = "Coupon does not exists!"
+        return JsonResponse({'msg':messages})

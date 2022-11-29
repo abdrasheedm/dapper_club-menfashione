@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from accounts.models import Account
 from store.models import Product, ProductAttribute, ReviewRating
 from orders.models import Order
+from carts.models import Coupon
 from category.models import Category, SubCategory, Size, Color, PriceFilter, Brand
 from home.models import Banner
 from django.views.decorators.cache import never_cache
@@ -10,7 +11,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password,check_password
 from django.contrib import messages
-from .forms import ProductForm, ProductAttributeForm, SubCategoryForm, CategoryForm, BrandForm, ColorForm, SizeForm, PriceFilterForm, BannerForm
+from .forms import ProductForm, ProductAttributeForm, SubCategoryForm, CategoryForm, BrandForm, ColorForm, SizeForm, PriceFilterForm, BannerForm, CouponForm
 
 
 
@@ -521,6 +522,66 @@ def review_unblock(request, review_id):
   review.status= True
   review.save()
   return redirect('review_management')
+
+
+
+# coupon management
+@never_cache
+@login_required(login_url='signin')
+def coupon_management(request):
+  coupons = Coupon.objects.all().order_by('id')
+  context = {
+    'coupons': coupons
+  }
+  return render(request, 'manager/coupon_management.html', context)
+
+
+#add coupon
+@never_cache
+@login_required(login_url='signin')
+def add_coupon(request):
+  if request.method == 'POST':
+    form = CouponForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('coupon_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = CouponForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_coupon.html', context)
+
+
+# Update coupon
+@never_cache
+@login_required(login_url='signin')
+def update_coupon(request, coupon_id):
+  coupon =  Coupon.objects.get(id = coupon_id)
+  form = CouponForm(instance = coupon)
+  if request.method == 'POST':
+    form = CouponForm(request.POST, instance = coupon)
+    if form.is_valid():
+      form.save()
+      return redirect('coupon_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_coupon.html', context)
+
+
+#delete coupon
+@never_cache
+@login_required(login_url='signin')
+def delete_coupon(request, coupon_id):
+  coupon = Coupon.objects.get(id = coupon_id)
+  coupon.delete()
+  return redirect('coupon_management')
 
 
 

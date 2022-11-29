@@ -51,7 +51,7 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=STATUS, default='New')
     refund_status = models.CharField(max_length=10, choices=REFUND_STATUS, default='None')
     coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, blank=True, null=True)
-    coupon_discount = models.IntegerField(blank=True, null=True)
+    coupon_discount = models.IntegerField(default=0 ,blank=True, null=True)
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

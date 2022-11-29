@@ -110,7 +110,7 @@ def store_by_brand(request, brand_slug=None):
 
 def search(request):
     q = request.GET['q']
-    products = Product.objects.filter(product_name__icontains=q).order_by('-id')
+    products = Product.objects.filter(product_name__icontains=q, sub_category__category__category_name__icontains=q).order_by('-id')
     products_count = products.count()
     context = {
         'products': products,

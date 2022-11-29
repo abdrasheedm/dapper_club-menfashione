@@ -203,11 +203,14 @@ def order_detail(request, order_id):
         total_amount += (item.product_price * item.quantity)
     tax = round((18 * float(total_amount))/100)
     sub_total = total_amount - tax
+    coupon_discount = order.coupon_discount
+    total_amount -= coupon_discount
     context = {
         'order':order,
         'ordered_products':ordered_products,
         'sub_total':sub_total,
         'tax':tax,
+        'coupon_discount':coupon_discount,
         'total_amount':total_amount,
     }
     return render(request, 'orders/order_detail.html', context)

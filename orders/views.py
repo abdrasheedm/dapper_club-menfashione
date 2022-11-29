@@ -34,6 +34,7 @@ def place_order(request):
 
     tax = round((18 * float(total_amount))/100)
     sub_total = total_amount - tax
+    coupon_discount = 0
 
     if request.method == 'POST':
         print("hai")
@@ -81,7 +82,10 @@ def place_order(request):
             data.save()
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             payment_mode = form.cleaned_data['payment_method']
-            print(payment_mode)
+
+            if data.coupon:
+                coupon_discount = data.coupon_discount
+                total_amount = data.order_total
             context = {
                 'order': order,
                 'cart_items': cart_items,
@@ -89,6 +93,7 @@ def place_order(request):
                 'tax': tax,
                 'total_amount': total_amount,
                 'payment_mode':payment_mode,
+                'coupon_discount':coupon_discount
             }
             return render(request, 'orders/payment.html', context)
 

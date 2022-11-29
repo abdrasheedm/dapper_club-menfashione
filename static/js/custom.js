@@ -99,28 +99,35 @@ $(document).ready(function(){
 
 	// apply coupon
 	$(document).on('click',"#apply_coupon",function() {
-        var _vm = $(this);
         var coupon_code = $("[name='coupon_code']").val();
-		console.log(coupon_code)
+		var order_number = $('.order_number').attr('order_number');
+		console.log(coupon_code, order_number)
 
-        //Ajax
+        // Ajax
         $.ajax({
             url: '/cart/apply-coupon',
             data:{
-                'coupon_code':coupon_code 
+                'coupon_code':coupon_code,
+				'order_number':order_number
             },
             dataType:'json',
-            beforeSend:function() {
-                _vm.attr('disabled', true);
-            },
             success:function(res){
-                _vm.attr('disabled', false);  
-                // swal.fire("Congratulations !", res.status, "success").then((value) => {
-                //     window.location.reload()
-                //   });
+				if(res.msg=='Coupon applied successfully'){
+					swal.fire("Congratulations !", res.msg, "success")
+                	$("#Payment").html(res.data);
+
+				}
+				else{
+					Swal.fire({
+						icon: 'error',
+						title: 'Sorry',
+						text: res.msg,
+					  })
+				}
+				
             }
 
-        });
+        }); 
         //end ajax
 
     });

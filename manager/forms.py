@@ -2,6 +2,7 @@ from django import forms
 from store.models import Product, ProductAttribute
 from category.models import Category, SubCategory, Color, Size, PriceFilter, Brand
 from home.models import Banner
+from carts.models import Coupon
 
 class ProductForm(forms.ModelForm):
 
@@ -125,6 +126,26 @@ class BannerForm(forms.ModelForm):
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+class DateInput(forms.DateTimeInput):
+    input_type = 'date'
+
+class CouponForm(forms.ModelForm):
+    
+    expiry_date = forms.DateField(widget=DateInput)
+
+    class Meta:
+        model = Coupon
+        fields = ['coupon_code','discount_price', 'minimum_amount', 'expiry_date', 'is_active']
+
+    def __init__(self, *args, **kwargs):
+        super(CouponForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+        self.fields['is_active'].widget.attrs['class'] = 'ml-2 mt-1 form-check-input'
+
 
 
 
