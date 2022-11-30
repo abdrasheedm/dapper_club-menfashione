@@ -46,13 +46,13 @@
               <td>₹ {{ order.order_total }}</td>
               <td>
                 {% if order.status == 'Cancelled' %}
-                <span class="text-danger font-weight-bold">{{ order.status }}</span>
-                {% elif order.status == 'Completed' %}
-                <span class="text-success font-weight-bold">{{ order.status }}</span>
-                {% elif order.status == 'Accepted' %}
-                <span class="text-muted font-weight-bold">{{ order.status }}</span>
-                {% else %} <span class="text-info font-weight-bold">{{ order.status }}</span>
-                {% endif %}
+                  <span class="text-danger font-weight-bold">{{ order.status }}</span>
+                  {% elif order.status == 'Delivered' %}
+                  <span class="text-success font-weight-bold">{{ order.status }}</span>
+                  {% elif order.status == 'Processing' %}
+                  <span class="text-muted font-weight-bold">{{ order.status }}</span>
+                  {% else %} <span class="text-info font-weight-bold">{{ order.status }}</span>
+                  {% endif %}
               </td>
               <td>
                 {% if order.status == 'Shipped' %}

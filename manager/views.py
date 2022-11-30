@@ -658,10 +658,15 @@ def product_management(request):
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_product(request):
   if request.method == 'POST':
+    print("hoi")
     form = ProductForm(request.POST, request.FILES)
+    print("pooi")
     if form.is_valid():
-        form.save()
-        return redirect('product_management')
+      print("hai")
+      form.save()
+      return redirect('product_management')
+    else:
+      print(form.errors)
   else:
     form = ProductForm()
     context = {

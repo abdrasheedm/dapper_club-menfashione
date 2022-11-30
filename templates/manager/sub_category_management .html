@@ -32,7 +32,7 @@
                         {% for sub_category in sub_categories %}
                         <tr>
                           <th scope="row">{{ sub_category.id }}</th>
-                          <td>{{ sub_category.sub_category }}</td>
+                          <td>{{sub_category.category }} -- {{ sub_category.sub_category }}</td>
                           <td>{{ sub_category.slug }}</td>
                           <td><a href="{% url 'update_sub_category' sub_category.id %}" class= "btn-sm btn-warning">Update</a></td>
                           <td><a href="{% url 'delete_sub_category' sub_category.id %}" class= "btn-sm btn-dark">Delete</a></td>
