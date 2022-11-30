@@ -15,6 +15,7 @@ def sent_otp(mobile, u_user):
     auth_token = settings.AUTH_TOKEN
     service_id = settings.SERVICE_ID
     client = Client(account_sid, auth_token)
+    print(account_sid, auth_token, service_id)
     verification = client.verify \
                     .services(service_id) \
                     .verifications \

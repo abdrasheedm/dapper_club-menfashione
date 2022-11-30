@@ -6,7 +6,7 @@ from carts.models import Coupon
 from category.models import Category, SubCategory, Size, Color, PriceFilter, Brand
 from home.models import Banner
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password,check_password
@@ -20,7 +20,8 @@ from .forms import ProductForm, ProductAttributeForm, SubCategoryForm, CategoryF
 # Create your views here.
 
 @never_cache
-@login_required(login_url='signin') 
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def manager_dashboard(request):
     if request.user.is_superadmin:
 
@@ -49,6 +50,7 @@ def manager_dashboard(request):
 # Manage users
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def user_management(request):
     if request.method == "POST":
       key = request.POST['key']
@@ -65,12 +67,21 @@ def user_management(request):
     return render(request, 'manager/user_management.html',context)
 
 
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def user_block(request, user_id):
   user = Account.objects.get(id=user_id)
   user.is_active = False
   user.save()
   return redirect('user_management')
 
+
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def user_unblock(request, user_id):
   user = Account.objects.get(id=user_id)
   user.is_active= True
@@ -80,6 +91,7 @@ def user_unblock(request, user_id):
 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def category_management(request):
     categories = Category.objects.all().order_by('id')
 
@@ -92,6 +104,7 @@ def category_management(request):
 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_category(request):
   if request.method == 'POST':
     form = CategoryForm(request.POST)
@@ -108,6 +121,7 @@ def add_category(request):
 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_category(request, category_id):
   category = Category.objects.get(id=category_id)
   category.delete()
@@ -116,7 +130,8 @@ def delete_category(request, category_id):
 
 # Update Category
 @never_cache
-@login_required(login_url='login')
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_category(request, category_id):
   category = Category.objects.get(id=category_id)
   form = CategoryForm(instance=category)
@@ -141,6 +156,7 @@ def update_category(request, category_id):
 # Sub category management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def sub_category_management(request):
     sub_categories = SubCategory.objects.all().order_by('id')
 
@@ -153,6 +169,7 @@ def sub_category_management(request):
 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_sub_category(request):
   if request.method == 'POST':
     form = SubCategoryForm(request.POST)
@@ -169,6 +186,7 @@ def add_sub_category(request):
 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_sub_category(request, sub_cat_id):
   sub_category = SubCategory.objects.get(id = sub_cat_id)
   form = SubCategoryForm(instance = sub_category)
@@ -187,6 +205,7 @@ def update_sub_category(request, sub_cat_id):
 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_sub_category(request, sub_cat_id):
   sub_category = SubCategory.objects.get(id=sub_cat_id)
   sub_category.delete()
@@ -196,6 +215,7 @@ def delete_sub_category(request, sub_cat_id):
 #brand management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def brand_management(request):
   brands = Brand.objects.all()
   context = {
@@ -207,6 +227,7 @@ def brand_management(request):
 #add brand
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_brand(request):
   if request.method == 'POST':
     form = BrandForm(request.POST, request.FILES)
@@ -229,6 +250,7 @@ def add_brand(request):
 # Update brand
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_brand(request, brand_id):
   brand = Brand.objects.get(id = brand_id)
   form = BrandForm(instance = brand)
@@ -246,6 +268,7 @@ def update_brand(request, brand_id):
 #delete brand
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_brand(request, brand_id):
   brand = Brand.objects.get(id = brand_id)
   brand.delete()
@@ -255,6 +278,7 @@ def delete_brand(request, brand_id):
 # Color management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def color_management(request):
   colors = Color.objects.all().order_by('id')
   context = {
@@ -266,6 +290,7 @@ def color_management(request):
 #add Color
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_color(request):
   if request.method == 'POST':
     form = ColorForm(request.POST)
@@ -288,6 +313,7 @@ def add_color(request):
 # Update color
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_color(request, color_id):
   color =  Color.objects.get(id = color_id)
   form = ColorForm(instance = color)
@@ -305,6 +331,7 @@ def update_color(request, color_id):
 #delete color
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_color(request, color_id):
   color = Color.objects.get(id = color_id)
   color.delete()
@@ -315,6 +342,7 @@ def delete_color(request, color_id):
 # Size management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def size_management(request):
   sizes = Size.objects.all().order_by('id')
   context = {
@@ -326,6 +354,7 @@ def size_management(request):
 #add size
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_size(request):
   if request.method == 'POST':
     form = SizeForm(request.POST)
@@ -348,6 +377,7 @@ def add_size(request):
 # Update size
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_size(request, size_id):
   size =  Size.objects.get(id = size_id)
   form = SizeForm(instance = size)
@@ -365,6 +395,7 @@ def update_size(request, size_id):
 #delete size
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_size(request,size_id):
   print('hai')
   size = Size.objects.get(id = size_id)
@@ -377,6 +408,7 @@ def delete_size(request,size_id):
 # Price-filter management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def price_filter_management(request):
   prices = PriceFilter.objects.all().order_by('id')
   context = {
@@ -388,6 +420,7 @@ def price_filter_management(request):
 #add Price-filter
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_price_filter(request):
   if request.method == 'POST':
     form = PriceFilterForm(request.POST)
@@ -410,6 +443,7 @@ def add_price_filter(request):
 # Update Price-filter
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_price_filter(request, price_filter_id):
   price_filter =  PriceFilter.objects.get(id = price_filter_id)
   form = PriceFilterForm(instance = price_filter)
@@ -427,6 +461,7 @@ def update_price_filter(request, price_filter_id):
 #delete Price-filter
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_price_filter(request, price_filter_id):
   print('hai')
   price_filter = PriceFilter.objects.get(id = price_filter_id)
@@ -438,6 +473,7 @@ def delete_price_filter(request, price_filter_id):
 # banner management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def banner_management(request):
   banners = Banner.objects.all().order_by('id')
   context = {
@@ -449,6 +485,7 @@ def banner_management(request):
 #add banner
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_banner(request):
   if request.method == 'POST':
     form = BannerForm(request.POST, request.FILES)
@@ -471,6 +508,7 @@ def add_banner(request):
 # Update banner
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_banner(request, banner_id):
   banner =  Banner.objects.get(id = banner_id)
   form = BannerForm(instance = banner)
@@ -488,6 +526,7 @@ def update_banner(request, banner_id):
 #delete Banner
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_banner(request, banner_id):
   banner = Banner.objects.get(id = banner_id)
   banner.delete()
@@ -497,6 +536,7 @@ def delete_banner(request, banner_id):
 # Review management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def review_management(request):
   reviews = ReviewRating.objects.all()
   context = {
@@ -508,6 +548,7 @@ def review_management(request):
 #block review
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def review_block(request, review_id):
   review = ReviewRating.objects.get(id=review_id)
   review.status = False
@@ -517,6 +558,7 @@ def review_block(request, review_id):
 # unblock review
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def review_unblock(request, review_id):
   review = ReviewRating.objects.get(id=review_id)
   review.status= True
@@ -528,6 +570,7 @@ def review_unblock(request, review_id):
 # coupon management
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def coupon_management(request):
   coupons = Coupon.objects.all().order_by('id')
   context = {
@@ -539,6 +582,7 @@ def coupon_management(request):
 #add coupon
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_coupon(request):
   if request.method == 'POST':
     form = CouponForm(request.POST)
@@ -561,6 +605,7 @@ def add_coupon(request):
 # Update coupon
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_coupon(request, coupon_id):
   coupon =  Coupon.objects.get(id = coupon_id)
   form = CouponForm(instance = coupon)
@@ -578,6 +623,7 @@ def update_coupon(request, coupon_id):
 #delete coupon
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_coupon(request, coupon_id):
   coupon = Coupon.objects.get(id = coupon_id)
   coupon.delete()
@@ -588,6 +634,7 @@ def delete_coupon(request, coupon_id):
 #Manage product
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def product_management(request):
   if request.method == "POST":
     key = request.POST['key']
@@ -608,6 +655,7 @@ def product_management(request):
 # Add Product
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_product(request):
   if request.method == 'POST':
     form = ProductForm(request.POST, request.FILES)
@@ -627,6 +675,7 @@ def add_product(request):
 # Edit Product
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def edit_product(request, product_id):
   product = Product.objects.get(id=product_id)
   form = ProductForm(instance=product)
@@ -652,6 +701,7 @@ def edit_product(request, product_id):
 # Delete Product
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_product(request, product_id):
   product = Product.objects.get(id=product_id)
   product.delete()
@@ -663,6 +713,7 @@ def delete_product(request, product_id):
   # Manage Order
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def order_management(request):
   if request.method =="POST":
     key = request.POST['key']
@@ -680,6 +731,7 @@ def order_management(request):
 # Accept Order
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def accept_order(request, order_number):
   order = Order.objects.get(order_number=order_number)
   order.status = 'Shipped'
@@ -692,7 +744,8 @@ def accept_order(request, order_number):
 
 # Complete Order
 @never_cache
-@login_required(login_url='login')
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def complete_order(request, order_number):
   order = Order.objects.get(order_number=order_number)
   order.status = 'Delivered'
@@ -704,7 +757,8 @@ def complete_order(request, order_number):
 
 # Cancel Order
 @never_cache
-@login_required(login_url='login')
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def manager_cancel_order(request, order_number):
   order = Order.objects.get(order_number=order_number)
   order.status = 'Cancelled'
@@ -720,6 +774,7 @@ def manager_cancel_order(request, order_number):
   # Manage Variation
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def variation_management(request):
   if request.method == 'POST':
     keyword = request.POST['keyword']
@@ -741,6 +796,7 @@ def variation_management(request):
 # Add Variation
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_variation(request):
   
   if request.method == 'POST':
@@ -762,6 +818,7 @@ def add_variation(request):
 # update variation 
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def update_variation(request, variation_id):
   variation = ProductAttribute.objects.get(id = variation_id)
   if request.method == 'POST':
@@ -781,8 +838,9 @@ def update_variation(request, variation_id):
 
 
 # delete variation 
-@never_cache 
+@never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def delete_variation(request, variation_id):
   variation = ProductAttribute.objects.get(id = variation_id)
   variation.delete()
@@ -791,7 +849,9 @@ def delete_variation(request, variation_id):
 
     
 # Admin orders
+@never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def admin_order(request):
   current_user = request.user
   if request.method == 'POST':
@@ -813,6 +873,7 @@ def admin_order(request):
 # admin password change
 @never_cache
 @login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
 def admin_change_password(request):
   if request.method == 'POST':
     current_user = request.user

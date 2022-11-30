@@ -30,8 +30,9 @@ class Category(models.Model):
 # Sub Category
 class SubCategory(models.Model):
     category        = models.ForeignKey(Category,on_delete=models.CASCADE)
-    slug            = AutoSlugField(populate_from='category',max_length=255,unique=True,null=True)
     sub_category    = models.CharField(max_length = 100)
+    slug            = AutoSlugField(populate_from='sub_category',max_length=255,unique=True,null=True)
+
 
     class Meta:
         verbose_name = 'Sub Category'
