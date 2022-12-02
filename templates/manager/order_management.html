@@ -52,8 +52,8 @@
                   {% endif %}
                 </td>
                 <td>
-                  {% if order.status == 'Processing' %}
-                  <a href="{% url 'accept_order' order.order_number %}" class="btn btn-sm btn-dark">Accept</a>
+                  {% if order.status == 'Accepted' %}
+                  <a href="{% url 'accept_order' order.order_number %}" class="btn btn-sm btn-dark">Ship</a>
                   {% elif order.status == 'Shipped' %}
                   <a href="{% url 'complete_order' order.order_number %}" class="btn btn-sm btn-danger">Complete</a>
                   {% endif %}

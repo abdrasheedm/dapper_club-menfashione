@@ -21,6 +21,7 @@ class Payment(models.Model):
 class Order(models.Model):
     STATUS = (
         ('Processing', 'Processing'),
+        ('Accepted', 'Accepted'),
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled'),
@@ -48,7 +49,7 @@ class Order(models.Model):
     order_total = models.FloatField()
     tax = models.FloatField()
     payment_method = models.CharField(max_length=100, null=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='New')
+    status = models.CharField(max_length=10, choices=STATUS, default='Processing')
     refund_status = models.CharField(max_length=10, choices=REFUND_STATUS, default='None')
     coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, blank=True, null=True)
     coupon_discount = models.IntegerField(default=0 ,blank=True, null=True)

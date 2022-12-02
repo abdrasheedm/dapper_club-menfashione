@@ -201,7 +201,7 @@ def order_detail(request, order_id):
     total_amount = 0
     for item in ordered_products:
         total_amount += (item.product_price * item.quantity)
-    tax = round((18 * float(total_amount))/100)
+    tax = round((5 * float(total_amount))/100)
     sub_total = total_amount - tax
     coupon_discount = order.coupon_discount
     total_amount -= coupon_discount

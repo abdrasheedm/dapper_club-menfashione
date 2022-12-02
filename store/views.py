@@ -200,7 +200,7 @@ def checkout(request):
         total_amount += (cart_item.product.product.price * cart_item.quantity)
 
 
-    tax = round((18 * float(total_amount))/100)
+    tax = round((5 * float(total_amount))/100)
     sub_total = total_amount - tax
     context = {
         'total_amount':total_amount,

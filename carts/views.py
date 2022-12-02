@@ -62,11 +62,8 @@ def cart(request):
     current_user=request.user
     context = {}
     try:
-        # print("ha3")
-
         if current_user.is_authenticated:
             cart_items = CartItem.objects.filter(user=current_user, is_active=True)
-            print("ha1")
 
         else:
             cart = Cart.objects.get(cart_id=request.session.session_key)
@@ -74,13 +71,10 @@ def cart(request):
 
         total_amount = 0
         for cart_item in cart_items:
-        # for p_id,item in request.session['cartdata'].items():
-
-            # total_amount += int(item['qty'])*float(item['price'])
             total_amount += (cart_item.product.product.price * cart_item.quantity)
 
 
-        tax = round((18 * float(total_amount))/100)
+        tax = round((5 * float(total_amount))/100)
         sub_total = total_amount - tax
         context = {
             'total_amount':total_amount,
@@ -141,7 +135,7 @@ def cart_update(request):
         total_amount += (cart_item.product.product.price * cart_item.quantity)
 
 
-        tax = round((18 * float(total_amount))/100)
+        tax = round((5 * float(total_amount))/100)
         sub_total = total_amount - tax
         context = {
             'total_amount':total_amount,
@@ -199,7 +193,7 @@ def apply_coupon(request):
     if Coupon.objects.filter(coupon_code__exact=coupon_code, is_active=True).exists():
         coupon = Coupon.objects.filter(coupon_code__exact=coupon_code, is_active=True)
         order = Order.objects.get(order_number=request.GET['order_number'])
-        if not Order.objects.filter(user=request.user, coupon=coupon[0]):
+        if not Order.objects.filter(user=request.user, coupon=coupon[0], is_ordered=True):
             if coupon.filter(expiry_date__gte=timezone.now()):
                 if order.order_total > coupon[0].minimum_amount:
                     order.coupon = coupon[0]
@@ -214,7 +208,7 @@ def apply_coupon(request):
                     for cart_item in cart_items:
                         total_amount += (cart_item.product.product.price * cart_item.quantity)
 
-                    tax = round((18 * float(total_amount))/100)
+                    tax = round((5 * float(total_amount))/100)
                     sub_total = total_amount - tax
                     coupon_discount = order.coupon_discount
                     total_amount -= coupon_discount

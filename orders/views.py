@@ -32,13 +32,13 @@ def place_order(request):
     for cart_item in cart_items:
         total_amount += (cart_item.product.product.price * cart_item.quantity)
 
-    tax = round((18 * float(total_amount))/100)
+    tax = round((5 * float(total_amount))/100)
     sub_total = total_amount - tax
     coupon_discount = 0
 
     if request.method == 'POST':
         print("hai")
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST) 
         print("hai")
         if form.is_valid():
 

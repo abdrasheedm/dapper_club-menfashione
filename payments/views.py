@@ -20,7 +20,7 @@ def order_payment(request):
     payment = Payment()
     payment.user = request.user
     if request.POST.get('payment_id'):
-        payment.payment_id = request.POST.get('payment_id') 
+        payment.payment_id = request.POST.get('payment_id')
     payment.payment_method = request.POST.get('payment_mode')
     payment.amount_paid = request.POST.get('amount_paid') 
     payment.status=True
@@ -28,14 +28,14 @@ def order_payment(request):
 
     print(payment)
     payment_id = request.POST.get('payment_id')
-    amount_paid = 100
-    if request.POST.get('payment_id'):
-        razorpay_client.payment.capture(payment_id, amount_paid)
+    # amount_paid = int(payment.amount_paid * 100)
+    # if request.POST.get('payment_id'):
+    #     razorpay_client.payment.capture(payment_id, amount_paid)
     order_number = request.POST.get('order_number')
     order = Order.objects.get(user=request.user, order_number=order_number)
     order.payment = payment
     order.is_ordered = True
-    order.status ='Processing' 
+    order.status ='Accepted' 
     order.save()
 
     cart_items = CartItem.objects.filter(user=request.user)
@@ -76,7 +76,7 @@ def order_complete(request):
     total_amount = 0
     for item in ordered_products:
         total_amount += (item.product_price * item.quantity)
-    tax = round((18 * float(total_amount))/100)
+    tax = round((5 * float(total_amount))/100)
     sub_total = total_amount - tax
     coupon_discount = order.coupon_discount
     total_amount -= coupon_discount

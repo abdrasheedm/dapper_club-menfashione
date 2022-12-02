@@ -54,9 +54,9 @@ def manager_dashboard(request):
 def user_management(request):
     if request.method == "POST":
       key = request.POST['key']
-      users = Account.objects.filter( Q(first_name__startswith=key) | Q(last_name__startswith=key) | Q(username__startswith=key) | Q(email__startswith=key), is_superadmin = False).order_by('id')
+      users = Account.objects.filter( Q(first_name__icontains=key) | Q(last_name__icontains=key) | Q(username__startswith=key) | Q(email__icontains=key), is_superadmin = False).order_by('-id')
     else:
-        users = Account.objects.filter(is_superadmin=False).order_by('id')
+        users = Account.objects.filter(is_superadmin=False).order_by('-id')
 
     paginator = Paginator(users,10)
     page = request.GET.get('page')
@@ -93,7 +93,7 @@ def user_unblock(request, user_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def category_management(request):
-    categories = Category.objects.all().order_by('id')
+    categories = Category.objects.all().order_by('-id')
 
     context = {
         'categories' :categories
@@ -111,6 +111,10 @@ def add_category(request):
     if form.is_valid():
         form.save()
         return redirect('category_management')
+
+    else:
+      messages.error(request, "Catergory with this same name already exists")
+      return redirect('add_category')
   else:
     form = CategoryForm()
     context = {
@@ -158,7 +162,7 @@ def update_category(request, category_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def sub_category_management(request):
-    sub_categories = SubCategory.objects.all().order_by('id')
+    sub_categories = SubCategory.objects.all().order_by('-id')
 
     context = {
         'sub_categories' :sub_categories
@@ -217,7 +221,7 @@ def delete_sub_category(request, sub_cat_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def brand_management(request):
-  brands = Brand.objects.all()
+  brands = Brand.objects.all().order_by('-id')
   context = {
     'brands': brands
   }
@@ -280,7 +284,7 @@ def delete_brand(request, brand_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def color_management(request):
-  colors = Color.objects.all().order_by('id')
+  colors = Color.objects.all().order_by('-id')
   context = {
     'colors': colors
   }
@@ -344,7 +348,7 @@ def delete_color(request, color_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def size_management(request):
-  sizes = Size.objects.all().order_by('id')
+  sizes = Size.objects.all().order_by('-id')
   context = {
     'sizes': sizes
   }
@@ -475,7 +479,7 @@ def delete_price_filter(request, price_filter_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def banner_management(request):
-  banners = Banner.objects.all().order_by('id')
+  banners = Banner.objects.all().order_by('-id')
   context = {
     'banners': banners
   }
@@ -538,7 +542,7 @@ def delete_banner(request, banner_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def review_management(request):
-  reviews = ReviewRating.objects.all()
+  reviews = ReviewRating.objects.all().order_by('-id')
   context = {
     'reviews': reviews
   }
@@ -572,7 +576,7 @@ def review_unblock(request, review_id):
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def coupon_management(request):
-  coupons = Coupon.objects.all().order_by('id')
+  coupons = Coupon.objects.all().order_by('-id')
   context = {
     'coupons': coupons
   }
@@ -638,9 +642,9 @@ def delete_coupon(request, coupon_id):
 def product_management(request):
   if request.method == "POST":
     key = request.POST['key']
-    products = Product.objects.filter(Q(product_name__icontains=key) | Q(slug__startswith=key) | Q(sub_category__category__category_name__startswith=key)).order_by('id')
+    products = Product.objects.filter(Q(product_name__icontains=key) | Q(slug__startswith=key) | Q(sub_category__category__category_name__startswith=key)).order_by('-id')
   else:
-    products = Product.objects.all().order_by('id')
+    products = Product.objects.all().order_by('-id')
 
   paginator = Paginator(products, 10)
   page = request.GET.get('page')
@@ -722,9 +726,9 @@ def delete_product(request, product_id):
 def order_management(request):
   if request.method =="POST":
     key = request.POST['key']
-    orders = Order.objects.filter(Q(is_ordered=True), Q(order_number__icontains=key) | Q(user__email__icontains=key) | Q(first_name__startswith=key)).order_by('id')
+    orders = Order.objects.filter(Q(is_ordered=True), Q(order_number__icontains=key) | Q(user__email__icontains=key) | Q(first_name__startswith=key)).order_by('-id')
   else:
-    orders = Order.objects.filter(is_ordered=True).order_by('id')
+    orders = Order.objects.filter(is_ordered=True).order_by('-id')
     
 
   context = {
@@ -783,10 +787,10 @@ def manager_cancel_order(request, order_number):
 def variation_management(request):
   if request.method == 'POST':
     keyword = request.POST['keyword']
-    variations = ProductAttribute.objects.filter(Q(product__product_name__icontains=keyword) | Q(product__sub_category__category__category_name__startswith=keyword) | Q(color__color_name__startswith=keyword | Q(size__size__startswith=keyword)).order_by('id'))
+    variations = ProductAttribute.objects.filter(Q(product__product_name__icontains=keyword) | Q(product__sub_category__category__category_name__startswith=keyword) | Q(color__color_name__startswith=keyword | Q(size__size__startswith=keyword)).order_by('-id'))
   
   else:
-    variations = ProductAttribute.objects.all().order_by('id')
+    variations = ProductAttribute.objects.all().order_by('-id')
   
   paginator = Paginator(variations, 10)
   page = request.GET.get('page')
