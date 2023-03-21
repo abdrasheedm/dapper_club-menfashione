@@ -6,7 +6,7 @@
     <div class="container">
       <div class="row d-flex justify-content-center align-items-center ">
         <div class="col-lg-12 col-xl-8">
-          <div class="card text-black mt-5 mb-5" style="border-radius: 25px; background-color: #F3F2EE;">
+          <div class="card text-black mt-5 mb-5 shadow-lg" style="border-radius: 25px; background-color: #FFFFFF;">
             <div class="card-body p-md-5">
               <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-6 col-xl-7 order-2 order-lg-1 ">
@@ -101,18 +101,23 @@
                       
                         <p> Already have an account? <a href="{% url 'signin' %}"> &nbsp Click here</a></p>
                       </label>
+                    </div><div class="d-none d-md-block col-md-10 col-lg-6 col-xl-4 d-flex align-items-center order-1 order-lg-2">
+  
+                      <img src="{% static 'img/logo1.png' %}"
+                        class="img-fluid" alt="Sample image">
+      
                     </div>
                     <p>By continuing, you agree to Dapper Club's <a href="#!">Terms of Use</a>  and <a href="">Privacy Policy.</a></p>
                     
                   </form>
   
                 </div>
-                <div class="d-none d-md-block col-md-10 col-lg-6 col-xl-4 d-flex align-items-center order-1 order-lg-2">
+                {% comment %} <div class="d-none d-md-block col-md-10 col-lg-6 col-xl-4 d-flex align-items-center order-1 order-lg-2">
   
                   <img src="{% static 'img/logo1.png' %}"
                     class="img-fluid" alt="Sample image">
   
-                </div>
+                </div> {% endcomment %}
               </div>
             </div>
           </div>

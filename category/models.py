@@ -45,8 +45,6 @@ class SubCategory(models.Model):
 # Brands
 
 class Brand(models.Model):
-
-    # sub_category    = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True)
     name            = models.CharField(max_length = 100)
     slug            = AutoSlugField(populate_from='name',max_length=255,unique=True,null=True)
     image           = models.ImageField(upload_to = "photos/brands")
